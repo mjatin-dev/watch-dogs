@@ -46,11 +46,89 @@ function SearchResult() {
       col3: "6.9 ETH",
     },
   ];
-
+  const NFTdata: any = [
+    {
+      collection: {
+        image: "/sample1.png",
+        name: "Clone X",
+        verified: true,
+      },
+      floorPrice: {
+        price: "10.3 ETH",
+        offer: 34,
+        positive: false,
+      },
+      profit: "10ETH",
+      minted: 3,
+      total: 12,
+    },
+    {
+      collection: {
+        image: "/sample3.png",
+        name: "TOSHIES",
+        verified: true,
+      },
+      floorPrice: {
+        price: "10.3 ETH",
+        offer: 34,
+        positive: true,
+      },
+      profit: "10ETH",
+      minted: 3,
+      total: 12,
+    },
+    {
+      collection: {
+        image: "/sample2.png",
+        name: "Sewer Pass",
+        verified: true,
+      },
+      floorPrice: {
+        price: "10.3 ETH",
+        offer: 34,
+        positive: false,
+      },
+      profit: "10ETH",
+      minted: 3,
+      total: 12,
+    },
+    {
+      collection: {
+        image: "/sample1.png",
+        name: "Bored Ape Yacht Club",
+        verified: true,
+      },
+      floorPrice: {
+        price: "10.3 ETH",
+        offer: 34,
+        positive: true,
+      },
+      profit: "10ETH",
+      minted: 3,
+      total: 12,
+    },
+    {
+      collection: {
+        image: "/sample3.png",
+        name: "CryptoPunks",
+        verified: true,
+      },
+      floorPrice: {
+        price: "10.3 ETH",
+        offer: 34,
+        positive: true,
+      },
+      profit: "10ETH",
+      minted: 3,
+      total: 12,
+    },
+  ];
   const [ETHAddress, setETHAddress] = useState("");
   const [profitabilityRows, setProfitabilityRows] = useState<Array<any>>([]);
+  const [NFTRows, setNFTRows] = useState<Array<any>>([]);
   useEffect(() => {
     setProfitabilityRows(dummyData);
+    setNFTRows(NFTdata);
   }, []);
 
   const handleChange = (event: any) => {
@@ -142,6 +220,109 @@ function SearchResult() {
             </table>
           </div>
         </Card>
+        <div className='h-20 col-span-2'>
+          <Card>
+            <div className='flex flex-row justify-between items-start'>
+              <p className='font-dmsans mb-2 font-medium text-4xl leading-14 tracking-tighter text-white'>
+                NFT Collections
+              </p>
+
+              <div className='font-medium text-xs flex items-center tracking-wider text-white'>
+                OWNED BY WALLET: 0x123Hdedhei00012htg...
+              </div>
+            </div>
+            <div className='h-96 overflow-auto my-2'>
+              <table className='w-full	'>
+                <thead className='text-left text-gray-400 text-sm uppercase'>
+                  <tr>
+                    <th className='px-6 py-3 font-dm-sans font-bold text-xl text-white '>
+                      COLLECTION
+                    </th>
+                    <th className='px-6 py-3 font-dm-sans font-bold text-xl text-white '>
+                      FLOOR PRICE
+                    </th>
+                    <th className='px-6 py-3 font-dm-sans font-bold text-xl text-white '>
+                      PROFIT
+                    </th>
+                    <th className='px-6 py-3 font-dm-sans font-bold text-xl text-white '>
+                      MINTED
+                    </th>
+                    <th className='px-6 py-3 font-dm-sans font-bold text-xl text-white '>
+                      TOTAL
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {NFTRows?.length > 0 ? (
+                    NFTRows?.map((row: any, index: number) => (
+                      <tr
+                        className={`w-full ${
+                          index % 2 && "bg-fade "
+                        }hover:rounded-lg h-24`}
+                      >
+                        <td className='px-6 py-4 flex flex-row items-center'>
+                          <div className='font-dm-sans mr-6 font-bold text-3xl  text-white'>
+                            {index + 1}
+                          </div>
+
+                          <img
+                            src={row?.collection?.image}
+                            className='w-16 h-16 mr-6 rounded-lg bg-center bg-cover'
+                          />
+                          <div className='font-dm-sans mr-2  font-bold text-3xl leading-56 flex items-center tracking-wide text-white'>
+                            {row?.collection?.name ?? "-"}
+                          </div>
+                          {row?.collection?.verified && (
+                            <img src='/tick.png' className='h-7 w-7' />
+                          )}
+                        </td>
+                        <td className='px-6 py-4 '>
+                          <div className='flex flex-col justify-end '>
+                            <div className='font-dm-sans font-bold text-3xl leading-56 flex items-center tracking-wide text-white'>
+                              {row?.floorPrice?.price ?? "-"}
+                            </div>
+                            <div
+                              className={` ${
+                                row?.floorPrice?.positive
+                                  ? "text-neonGreen"
+                                  : "text-red-600"
+                              } font-dm-sans font-bold text-base self-end leading-56 flex items-center tracking-wide `}
+                            >
+                              {row?.floorPrice?.offer
+                                ? row?.floorPrice?.positive
+                                  ? "+" + row?.floorPrice?.offer + "%"
+                                  : "-" + row?.floorPrice?.offer + "%"
+                                : "-"}
+                            </div>
+                          </div>
+                        </td>
+                        <td className='px-6 py-4 '>
+                          <div className='font-dm-sans text-3xl font-bold text-7  text-white'>
+                            {row?.profit ?? "-"}
+                          </div>
+                        </td>
+                        <td className='px-6 py-4 text-3xl '>
+                          <div className='font-dm-sans font-bold text-7  text-white'>
+                            {row?.minted ?? "-"}
+                          </div>
+                        </td>
+                        <td className='px-6 py-4 text-3xl'>
+                          <div className='font-dm-sans font-bold text-7  text-white'>
+                            {row?.total ?? "-"}
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <div className='font-dm-sans font-bold text-7  text-white'>
+                      No data found
+                    </div>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   );
