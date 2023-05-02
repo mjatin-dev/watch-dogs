@@ -16,7 +16,7 @@ function About() {
             <h2 className='text-white text-lg font-bold mb-4 font-inter font-medium leading-7 tracking-tighter text-white'>
               Transparency..
             </h2>
-            <p className='font-inter text-md leading-8 font-medium tracking-tighter text-white'>
+            <div className='font-inter text-md leading-8 font-medium tracking-tighter text-white'>
               DALL·E is an AI system developed by OpenAI that can create
               original, realistic images and art from a short text description.
               It can make realistic and context-aware edits, including
@@ -52,7 +52,7 @@ function About() {
                   You can purchase additional credits through your account page.
                 </li>
               </ul>
-            </p>
+            </div>
           </div>
         </div>
       </div>

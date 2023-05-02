@@ -1,5 +1,10 @@
+import Layout from "@/components/Layout";
 import Dashboard from "./dashboard";
 
 export default function Home() {
-  return <Dashboard />;
+  return (
+    <Layout>
+      <Dashboard />
+    </Layout>
+  );
 }

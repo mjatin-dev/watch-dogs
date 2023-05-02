@@ -13,7 +13,7 @@ module.exports = {
         fade: "rgba(255, 255, 255, 0.1);",
       },
       fontFamily: {
-        body: ["DM Sans"],
+        body: ["DM+Sans"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

@@ -1,25 +1,14 @@
-import Login from "@/components/Login";
-import Nav from "@/components/Nav";
+
 import SearchBar from "@/components/SearchBar";
 import React, { useState } from "react";
 
 function Dashboard() {
   const [ETHAddress, setETHAddress] = useState("");
-  const [show, setShow] = useState(false);
-  const handleClose = () => {
-    setShow(false);
-  };
-  const handleOpen = () => {
-    setShow(true);
-  };
-
   const handleChange = (event: any) => {
     setETHAddress(event.target.value);
   };
   return (
     <div className='flex min-h-screen flex-col items-center bg-#0A0909'>
-      <Nav handleOpen={handleOpen} />
-      <Login handleClose={handleClose} show={show} />
       <div className='flex flex-col items-center my-20 '>
         <img
           src='/Watchdogs.png'
