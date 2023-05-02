@@ -2,6 +2,7 @@ import Card from "@/components/Card";
 import Charts from "@/components/Charts";
 import Nav from "@/components/Nav";
 import SearchBar from "@/components/SearchBar";
+import { supabase } from "@/config/supabase";
 import React, { useEffect, useState } from "react";
 
 function SearchResult() {
@@ -351,7 +352,12 @@ function SearchResult() {
     setProfitabilityRows(dummyData);
     setNFTCollectionRows(NFTCollection);
     setNFTTransactionRows(NFTTransaction);
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    const response = await supabase.from("wallet").select("*");
+  };
 
   const handleChange = (event: any) => {
     setETHAddress(event.target.value);
