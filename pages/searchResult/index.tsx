@@ -1,6 +1,7 @@
 import Card from "@/components/Card";
 import Charts from "@/components/Charts";
 import Nav from "@/components/Nav";
+import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import React, { useEffect, useState } from "react";
 
@@ -347,11 +348,18 @@ function SearchResult() {
   const [profitabilityRows, setProfitabilityRows] = useState<Array<any>>([]);
   const [NFTCollectionRows, setNFTCollectionRows] = useState<Array<any>>([]);
   const [NFTTransactionRows, setNFTTransactionRows] = useState<Array<any>>([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage] = useState(5);
+
   useEffect(() => {
     setProfitabilityRows(dummyData);
     setNFTCollectionRows(NFTCollection);
     setNFTTransactionRows(NFTTransaction);
   }, []);
+
+  const handleChangePage = (newPage: number) => {
+    setPage(newPage);
+  };
 
   const handleChange = (event: any) => {
     setETHAddress(event.target.value);
@@ -503,7 +511,7 @@ function SearchResult() {
           0x123Hdedhei0001223332dju
         </p>
       </div>
-      <div className='grid grid-cols-2 grid-rows-4 gap-4 w-full p-10 '>
+      <div className='grid grid-cols-2 grid-rows-4 gap-4 w-full p-10 mb-20 '>
         <Card>
           <p className='font-DM+Sans  mb-2 font-medium text-4xl leading-14 tracking-tighter text-white'>
             Total Balance
@@ -693,88 +701,115 @@ function SearchResult() {
         </div>
         <div className='h-96 row-auto col-span-2 mb-10'>
           <Card>
-            <p className='font-DM+Sans mb-2 font-medium text-4xl leading-14 tracking-tighter text-white'>
-              NFT Transactions
-            </p>
-            <div className='max-h-screen overflow-auto my-2'>
-              <table className='w-full md:min-w-max mt-6	'>
-                <thead className='text-left bg-fade h-20 text-gray-400 text-sm uppercase'>
-                  <tr>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      Txn Hash
-                    </th>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      Date
-                    </th>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      From
-                    </th>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      to
-                    </th>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      Token ID
-                    </th>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      Profit / Loss
-                    </th>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      Type
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {NFTTransactionRows?.length > 0 ? (
-                    NFTTransactionRows?.map((row: any, index: number) => (
-                      <tr
-                        className={`w-full hover:bg-fade 
+            <div className='flex flex-col w-full '>
+              <div>
+                <p className='font-DM+Sans mb-2 font-medium text-4xl leading-14 tracking-tighter text-white'>
+                  NFT Transactions
+                </p>
+                <div className='max-h-screen overflow-auto my-2'>
+                  <table className='w-full md:min-w-max mt-6	'>
+                    <thead className='text-left bg-fade h-20 text-gray-400 text-sm uppercase'>
+                      <tr>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          Txn Hash
+                        </th>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          Date
+                        </th>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          From
+                        </th>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          to
+                        </th>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          Token ID
+                        </th>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          Profit / Loss
+                        </th>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          Type
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {NFTTransactionRows?.length > 0 ? (
+                        (rowsPerPage > 0
+                          ? NFTTransactionRows.slice(
+                              page * rowsPerPage,
+                              page * rowsPerPage + rowsPerPage
+                            )
+                          : NFTTransactionRows
+                        ).map((row: any, index: number) => (
+                          <tr
+                            className={`w-full hover:bg-fade 
                         border-b-2 border-fade
                         hover:rounded-lg h-24`}
-                      >
-                        <td className='px-6 py-4 '>
-                          <div className='bg-gradient-to-r from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
-                            {row?.txnHash ?? "-"}
-                          </div>
-                        </td>
-                        <td className='px-6 py-4 text-center '>
-                          <div className='font-DM+Sans mr-6 font-bold text-xl  text-white'>
-                            {row?.date ?? "-"}
-                          </div>
-                        </td>
-                        <td className='px-6 py-4  text-center'>
-                          <div className='font-DM+Sans mr-6 font-medium text-xl  text-white'>
-                            {row?.from ?? "-"}
-                          </div>
-                        </td>
-                        <td className='px-6 py-4  text-center'>
-                          <div className='font-DM+Sans mr-6 font-medium text-xl  text-white'>
-                            {row?.to ?? "-"}
-                          </div>
-                        </td>
-                        <td className='px-6 py-4  text-center'>
-                          <div className='bg-gradient-to-r from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
-                            {row?.tokenId ?? "-"}
-                          </div>
-                        </td>
-                        <td className='px-6 py-4  text-center'>
-                          <div className='font-DM+Sans mr-6 font-medium text-xl  text-neonGreen'>
-                            {row?.profitOrLoss ?? "-"}
-                          </div>
-                        </td>
-                        <td className='px-6 py-4  text-center'>
-                          <div className='font-DM+Sans mr-6 font-medium text-xl  text-white'>
-                            {row?.type ?? "-"}
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <div className='font-DM+Sans font-bold text-7  text-white'>
-                      No data found
-                    </div>
-                  )}
-                </tbody>
-              </table>
+                          >
+                            <td className='px-6 py-4 '>
+                              <div className='bg-gradient-to-r from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
+                                {row?.txnHash ?? "-"}
+                              </div>
+                            </td>
+                            <td className='px-6 py-4 text-center '>
+                              <div className='font-DM+Sans mr-6 font-bold text-xl  text-white'>
+                                {row?.date ?? "-"}
+                              </div>
+                            </td>
+                            <td className='px-6 py-4  text-center'>
+                              <div className='font-DM+Sans mr-6 font-medium text-xl  text-white'>
+                                {row?.from ?? "-"}
+                              </div>
+                            </td>
+                            <td className='px-6 py-4  text-center'>
+                              <div className='font-DM+Sans mr-6 font-medium text-xl  text-white'>
+                                {row?.to ?? "-"}
+                              </div>
+                            </td>
+                            <td className='px-6 py-4  text-center'>
+                              <div className='bg-gradient-to-r from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
+                                {row?.tokenId ?? "-"}
+                              </div>
+                            </td>
+                            <td className='px-6 py-4  text-center'>
+                              <div className='font-DM+Sans mr-6 font-medium text-xl  text-neonGreen'>
+                                {row?.profitOrLoss ?? "-"}
+                              </div>
+                            </td>
+                            <td className='px-6 py-4  text-center'>
+                              <div className='font-DM+Sans mr-6 font-medium text-xl  text-white'>
+                                {row?.type ?? "-"}
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <div className='font-DM+Sans font-bold text-7  text-white'>
+                          No data found
+                        </div>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className='self-end'>
+                <Pagination
+                  totalRows={NFTTransactionRows?.length}
+                  page={page}
+                  rowsPerPage={rowsPerPage}
+                  onPageChange={handleChangePage}
+                />
+              </div>
+              <div className='self-end mt-4'>
+                <div className='font-DM+sans font-bold text-white text-15 leading-56 flex items-center'>
+                  {"{ Download "}
+                  <span className='font-bold text-purple-500 mx-2 cursor-pointer text-15 leading-56 flex items-center'>
+                    CSV Export
+                  </span>
+                  {" }"}
+                </div>
+              </div>
             </div>
           </Card>
         </div>
