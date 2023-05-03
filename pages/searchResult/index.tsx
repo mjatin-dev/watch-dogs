@@ -1,6 +1,7 @@
 import Card from "@/components/Card";
 import Charts from "@/components/Charts";
 import Nav from "@/components/Nav";
+import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import { supabase } from "@/config/supabase";
 import React, { useEffect, useState } from "react";
@@ -125,229 +126,15 @@ function SearchResult() {
       total: 12,
     },
   ];
-  const NFTTransaction: any = [
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 5,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 56,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 26,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-    {
-      txnHash: "0x123Hei0001223dju...",
-      date: "15 days 4 hrs ago",
-      from: "Null Address: 0x00...00",
-      to: "0x45ty7632skjdbcbu...",
-      tokenId: 260,
-      profitOrLoss: "+2.53 ETH",
-      type: "ERC-721",
-    },
-  ];
+ 
 
   const [ETHAddress, setETHAddress] = useState("");
   const [profitabilityRows, setProfitabilityRows] = useState<Array<any>>([]);
   const [NFTCollectionRows, setNFTCollectionRows] = useState<Array<any>>([]);
   const [NFTTransactionRows, setNFTTransactionRows] = useState<Array<any>>([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage] = useState(5);
+
   useEffect(() => {
     setProfitabilityRows(dummyData);
     setNFTCollectionRows(NFTCollection);
@@ -427,22 +214,6 @@ function SearchResult() {
         },
       },
     },
-
-    //   chart: {
-    //     height: 350,
-    //     type: "scatter",
-    //     zoom: {
-    //       enabled: true,
-    //       type: "xy",
-    //     },
-    //   },
-    //   xaxis: {
-    //     tickAmount: 10,
-    //   },
-    //   yaxis: {
-    //     tickAmount: 7,
-    //   },
-    // },
     series: [
       {
         name: "PORSCHE 911",
@@ -521,7 +292,7 @@ function SearchResult() {
           0x123Hdedhei0001223332dju
         </p>
       </div>
-      <div className='grid grid-cols-2 grid-rows-4 gap-4 w-full p-10 '>
+      <div className='grid grid-cols-2 grid-rows-4 gap-4 w-full p-10 mb-20 '>
         <Card>
           <p className='font-DM+Sans  mb-2 font-medium text-4xl leading-14 tracking-tighter text-white'>
             Total Balance
@@ -715,41 +486,49 @@ function SearchResult() {
         </div>
         <div className='h-96 row-auto col-span-2 mb-10'>
           <Card>
-            <p className='font-DM+Sans mb-2 font-medium text-4xl leading-14 tracking-tighter text-white'>
-              NFT Transactions
-            </p>
-            <div className='max-h-screen overflow-auto my-2'>
-              <table className='w-full md:min-w-max mt-6	'>
-                <thead className='text-left bg-fade h-20 text-gray-400 text-sm uppercase'>
-                  <tr>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      Txn Hash
-                    </th>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      Date
-                    </th>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      From
-                    </th>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      to
-                    </th>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      Token ID
-                    </th>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      Profit / Loss
-                    </th>
-                    <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
-                      Type
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {NFTTransactionRows?.length > 0 ? (
-                    NFTTransactionRows?.map((row: any, index: number) => (
-                      <tr
-                        className={`w-full hover:bg-fade 
+            <div className='flex flex-col w-full '>
+              <div>
+                <p className='font-DM+Sans mb-2 font-medium text-4xl leading-14 tracking-tighter text-white'>
+                  NFT Transactions
+                </p>
+                <div className='max-h-screen overflow-auto my-2'>
+                  <table className='w-full md:min-w-max mt-6	'>
+                    <thead className='text-left bg-fade h-20 text-gray-400 text-sm uppercase'>
+                      <tr>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          Txn Hash
+                        </th>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          Date
+                        </th>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          From
+                        </th>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          to
+                        </th>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          Token ID
+                        </th>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          Profit / Loss
+                        </th>
+                        <th className='px-6 py-3 font-DM+Sans font-bold text-3xl text-white '>
+                          Type
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {NFTTransactionRows?.length > 0 ? (
+                        (rowsPerPage > 0
+                          ? NFTTransactionRows.slice(
+                              page * rowsPerPage,
+                              page * rowsPerPage + rowsPerPage
+                            )
+                          : NFTTransactionRows
+                        ).map((row: any, index: number) => (
+                          <tr
+                            className={`w-full hover:bg-fade 
                         border-b-2 border-fade
                         hover:rounded-lg h-24`}
                       >
@@ -799,12 +578,12 @@ function SearchResult() {
                   )}
                 </tbody>
               </table>
-            </div>
+              </div> </div> </div>
           </Card>
         </div>
       </div>
     </div>
   );
 }
-
+)
 export default SearchResult;
