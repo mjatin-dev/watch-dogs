@@ -6,6 +6,7 @@ import SearchBar from "@/components/SearchBar";
 import { supabase } from "@/config/supabase";
 import React, { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
+import { useRouter } from "next/router";
 
 function SearchResult() {
   const dummyData: any = [
@@ -128,33 +129,34 @@ function SearchResult() {
     },
   ];
 
-  const [ETHAddress, setETHAddress] = useState("");
+  const [searchETH, setSearchETH] = useState("");
   const [loading, setLoading] = useState(false);
   const [profitabilityRows, setProfitabilityRows] = useState<Array<any>>([]);
   const [NFTCollectionRows, setNFTCollectionRows] = useState<Array<any>>([]);
   const [NFTTransactionRows, setNFTTransactionRows] = useState<Array<any>>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage] = useState(5);
+  const router = useRouter();
+  const { ETHAddress } = router.query;
 
   useEffect(() => {
     setProfitabilityRows(dummyData);
     setNFTCollectionRows(NFTCollection);
     fetchTransactions();
     fetchData();
-  }, []);
+  }, [ETHAddress]);
 
   const fetchTransactions = async () => {
     setLoading(true);
     const API_KEY = process.env.ETHERSCAN_API_KEY;
-    const USER_ADDRESS = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e";
     const response = await fetch(
-      `https://api.etherscan.io/api?module=account&action=txlist&address=${USER_ADDRESS}&startblock=0&endblock=99999999&sort=asc&apikey=${API_KEY}`
+      `https://api.etherscan.io/api?module=account&action=txlist&address=${ETHAddress}&startblock=0&endblock=99999999&sort=asc&apikey=${API_KEY}`
     );
     const data = await response.json();
     if (data?.status == 1) {
       setNFTTransactionRows(data?.result);
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const fetchData = async () => {
@@ -164,7 +166,7 @@ function SearchResult() {
     setPage(newPage);
   };
   const handleChange = (event: any) => {
-    setETHAddress(event.target.value);
+    setSearchETH(event.target.value);
   };
   const NFTTransactionsChartData: any = {
     options: {
@@ -289,7 +291,7 @@ function SearchResult() {
         >
           WatchDogs
         </div>
-        <SearchBar value={ETHAddress} handleChange={handleChange} />
+        <SearchBar value={searchETH} handleChange={handleChange} />
       </div>
       <div className='flex flex-row items-center self-start ml-10 '>
         <div className='font-DM+Sans mr-2 font-medium text-3xl  text-white '>
