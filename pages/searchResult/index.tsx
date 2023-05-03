@@ -351,9 +351,21 @@ function SearchResult() {
   useEffect(() => {
     setProfitabilityRows(dummyData);
     setNFTCollectionRows(NFTCollection);
-    setNFTTransactionRows(NFTTransaction);
+    fetchTransactions();
     fetchData();
   }, []);
+
+  const fetchTransactions = async () => {
+    const API_KEY = process.env.ETHERSCAN_API_KEY;
+    const USER_ADDRESS = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e";
+    const response = await fetch(
+      `https://api.etherscan.io/api?module=account&action=txlist&address=${USER_ADDRESS}&startblock=0&endblock=99999999&sort=asc&apikey=${API_KEY}`
+    );
+    const data = await response.json();
+    if (data?.status == 1) {
+      setNFTTransactionRows(data?.result);
+    }
+  };
 
   const fetchData = async () => {
     const response = await supabase.from("wallet").select("*");
@@ -566,8 +578,10 @@ function SearchResult() {
                     </tr>
                   ))
                 ) : (
-                  <div className='font-DM+Sans font-bold text-7  text-white'>
-                    No data found
+                  <div className='flex w-screen my-24  items-center justify-center '>
+                    <div className='font-DM+Sans  font-bold text-7  text-white'>
+                      No data found
+                    </div>
                   </div>
                 )}
               </tbody>
@@ -668,8 +682,10 @@ function SearchResult() {
                       </tr>
                     ))
                   ) : (
-                    <div className='font-DM+Sans font-bold text-7  text-white'>
-                      No data found
+                    <div className='flex w-screen my-24  items-center justify-center '>
+                      <div className='font-DM+Sans  font-bold text-7  text-white'>
+                        No data found
+                      </div>
                     </div>
                   )}
                 </tbody>
@@ -738,45 +754,47 @@ function SearchResult() {
                         hover:rounded-lg h-24`}
                       >
                         <td className='px-6 py-4 '>
-                          <div className='bg-gradient-to-r from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
-                            {row?.txnHash ?? "-"}
+                          <div className='bg-gradient-to-r w-60 truncate from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
+                            {row?.hash ?? "-"}
                           </div>
                         </td>
                         <td className='px-6 py-4 text-center '>
-                          <div className='font-DM+Sans mr-6 font-bold text-xl  text-white'>
-                            {row?.date ?? "-"}
+                          <div className='font-DM+Sans  w-60 truncate mr-6 font-bold text-xl  text-white'>
+                            {row?.timeStamp ?? "-"}
                           </div>
                         </td>
                         <td className='px-6 py-4  text-center'>
-                          <div className='font-DM+Sans mr-6 font-medium text-xl  text-white'>
+                          <div className='font-DM+Sans mr-6   w-60 truncate font-medium text-xl  text-white'>
                             {row?.from ?? "-"}
                           </div>
                         </td>
                         <td className='px-6 py-4  text-center'>
-                          <div className='font-DM+Sans mr-6 font-medium text-xl  text-white'>
+                          <div className='font-DM+Sans mr-6  w-60 truncate font-medium text-xl  text-white'>
                             {row?.to ?? "-"}
                           </div>
                         </td>
                         <td className='px-6 py-4  text-center'>
-                          <div className='bg-gradient-to-r from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
-                            {row?.tokenId ?? "-"}
+                          <div className='bg-gradient-to-r  w-60 truncate from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
+                            {row?.transactionIndex ?? "-"}
                           </div>
                         </td>
                         <td className='px-6 py-4  text-center'>
-                          <div className='font-DM+Sans mr-6 font-medium text-xl  text-neonGreen'>
-                            {row?.profitOrLoss ?? "-"}
+                          <div className='font-DM+Sans mr-6  w-60 truncate font-medium text-xl  text-neonGreen'>
+                            +2.53 ETH
                           </div>
                         </td>
                         <td className='px-6 py-4  text-center'>
-                          <div className='font-DM+Sans mr-6 font-medium text-xl  text-white'>
-                            {row?.type ?? "-"}
+                          <div className='font-DM+Sans mr-6  w-60 truncate font-medium text-xl  text-white'>
+                            ERC-721
                           </div>
                         </td>
                       </tr>
                     ))
                   ) : (
-                    <div className='font-DM+Sans font-bold text-7  text-white'>
-                      No data found
+                    <div className='flex w-screen my-24  items-center justify-center '>
+                      <div className='font-DM+Sans  font-bold text-7  text-white'>
+                        No data found
+                      </div>
                     </div>
                   )}
                 </tbody>
