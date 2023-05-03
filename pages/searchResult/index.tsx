@@ -5,6 +5,7 @@ import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import { supabase } from "@/config/supabase";
 import React, { useEffect, useState } from "react";
+import Loader from "@/components/Loader";
 
 function SearchResult() {
   const dummyData: any = [
@@ -126,9 +127,9 @@ function SearchResult() {
       total: 12,
     },
   ];
- 
 
   const [ETHAddress, setETHAddress] = useState("");
+  const [loading, setLoading] = useState(false);
   const [profitabilityRows, setProfitabilityRows] = useState<Array<any>>([]);
   const [NFTCollectionRows, setNFTCollectionRows] = useState<Array<any>>([]);
   const [NFTTransactionRows, setNFTTransactionRows] = useState<Array<any>>([]);
@@ -143,6 +144,7 @@ function SearchResult() {
   }, []);
 
   const fetchTransactions = async () => {
+    setLoading(true);
     const API_KEY = process.env.ETHERSCAN_API_KEY;
     const USER_ADDRESS = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e";
     const response = await fetch(
@@ -151,13 +153,16 @@ function SearchResult() {
     const data = await response.json();
     if (data?.status == 1) {
       setNFTTransactionRows(data?.result);
+      setLoading(false);
     }
   };
 
   const fetchData = async () => {
     const response = await supabase.from("wallet").select("*");
   };
-
+  const handleChangePage = (newPage: number) => {
+    setPage(newPage);
+  };
   const handleChange = (event: any) => {
     setETHAddress(event.target.value);
   };
@@ -273,8 +278,10 @@ function SearchResult() {
     type: "donut",
   };
   return (
-    <div className='flex min-h-screen flex-col items-center bg-#0A0909'>
+    <div className={`flex min-h-screen flex-col items-center bg-#0A0909`}>
       <Nav />
+      <Loader loading={loading} />
+
       <div className='flex mb-20 flex-col items-center w-full'>
         <div
           className='w-956 h-146 mb-10 mt-20 font-inter font-medium text-white text-5xl leading-11 flex items-center 
@@ -323,9 +330,9 @@ function SearchResult() {
           </div>
           <div className='h-96 overflow-auto my-2'>
             <table className='w-full	'>
-              <tbody>
-                {profitabilityRows?.length > 0 ? (
-                  profitabilityRows?.map((row: any) => (
+              {profitabilityRows?.length > 0 ? (
+                <tbody>
+                  {profitabilityRows?.map((row: any) => (
                     <tr className='w-full hover:bg-fade hover:rounded-lg h-24'>
                       <td className='px-6 py-4'>
                         <img
@@ -347,15 +354,15 @@ function SearchResult() {
                         </div>
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <div className='flex w-screen my-24  items-center justify-center '>
-                    <div className='font-DM+Sans  font-bold text-7  text-white'>
-                      No data found
-                    </div>
+                  ))}
+                </tbody>
+              ) : (
+                <div className='flex w-screen my-24  items-center justify-center '>
+                  <div className='font-DM+Sans  font-bold text-7  text-white'>
+                    No data found
                   </div>
-                )}
-              </tbody>
+                </div>
+              )}
             </table>
           </div>
         </Card>
@@ -391,9 +398,9 @@ function SearchResult() {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  {NFTCollectionRows?.length > 0 ? (
-                    NFTCollectionRows?.map((row: any, index: number) => (
+                {NFTCollectionRows?.length > 0 ? (
+                  <tbody>
+                    {NFTCollectionRows?.map((row: any, index: number) => (
                       <tr
                         className={`w-full ${
                           index % 2 && "bg-fade "
@@ -451,15 +458,15 @@ function SearchResult() {
                           </div>
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <div className='flex w-screen my-24  items-center justify-center '>
-                      <div className='font-DM+Sans  font-bold text-7  text-white'>
-                        No data found
-                      </div>
+                    ))}
+                  </tbody>
+                ) : (
+                  <div className='flex w-screen my-24  items-center justify-center '>
+                    <div className='font-DM+Sans  font-bold text-7  text-white'>
+                      No data found
                     </div>
-                  )}
-                </tbody>
+                  </div>
+                )}
               </table>
             </div>
           </Card>
@@ -531,59 +538,78 @@ function SearchResult() {
                             className={`w-full hover:bg-fade 
                         border-b-2 border-fade
                         hover:rounded-lg h-24`}
-                      >
-                        <td className='px-6 py-4 '>
-                          <div className='bg-gradient-to-r w-60 truncate from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
-                            {row?.hash ?? "-"}
+                          >
+                            <td className='px-6 py-4 '>
+                              <div className='bg-gradient-to-r w-60 truncate from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
+                                {row?.hash ?? "-"}
+                              </div>
+                            </td>
+                            <td className='px-6 py-4 text-center '>
+                              <div className='font-DM+Sans  w-60 truncate mr-6 font-bold text-xl  text-white'>
+                                {row?.timeStamp ?? "-"}
+                              </div>
+                            </td>
+                            <td className='px-6 py-4  text-center'>
+                              <div className='font-DM+Sans mr-6   w-60 truncate font-medium text-xl  text-white'>
+                                {row?.from ?? "-"}
+                              </div>
+                            </td>
+                            <td className='px-6 py-4  text-center'>
+                              <div className='font-DM+Sans mr-6  w-60 truncate font-medium text-xl  text-white'>
+                                {row?.to ?? "-"}
+                              </div>
+                            </td>
+                            <td className='px-6 py-4  text-center'>
+                              <div className='bg-gradient-to-r  w-60 truncate from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
+                                {row?.transactionIndex ?? "-"}
+                              </div>
+                            </td>
+                            <td className='px-6 py-4  text-center'>
+                              <div className='font-DM+Sans mr-6  w-60 truncate font-medium text-xl  text-neonGreen'>
+                                +2.53 ETH
+                              </div>
+                            </td>
+                            <td className='px-6 py-4  text-center'>
+                              <div className='font-DM+Sans mr-6  w-60 truncate font-medium text-xl  text-white'>
+                                ERC-721
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <div className='flex w-screen my-24  items-center justify-center '>
+                          <div className='font-DM+Sans  font-bold text-7  text-white'>
+                            No data found
                           </div>
-                        </td>
-                        <td className='px-6 py-4 text-center '>
-                          <div className='font-DM+Sans  w-60 truncate mr-6 font-bold text-xl  text-white'>
-                            {row?.timeStamp ?? "-"}
-                          </div>
-                        </td>
-                        <td className='px-6 py-4  text-center'>
-                          <div className='font-DM+Sans mr-6   w-60 truncate font-medium text-xl  text-white'>
-                            {row?.from ?? "-"}
-                          </div>
-                        </td>
-                        <td className='px-6 py-4  text-center'>
-                          <div className='font-DM+Sans mr-6  w-60 truncate font-medium text-xl  text-white'>
-                            {row?.to ?? "-"}
-                          </div>
-                        </td>
-                        <td className='px-6 py-4  text-center'>
-                          <div className='bg-gradient-to-r  w-60 truncate from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
-                            {row?.transactionIndex ?? "-"}
-                          </div>
-                        </td>
-                        <td className='px-6 py-4  text-center'>
-                          <div className='font-DM+Sans mr-6  w-60 truncate font-medium text-xl  text-neonGreen'>
-                            +2.53 ETH
-                          </div>
-                        </td>
-                        <td className='px-6 py-4  text-center'>
-                          <div className='font-DM+Sans mr-6  w-60 truncate font-medium text-xl  text-white'>
-                            ERC-721
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <div className='flex w-screen my-24  items-center justify-center '>
-                      <div className='font-DM+Sans  font-bold text-7  text-white'>
-                        No data found
-                      </div>
-                    </div>
-                  )}
-                </tbody>
-              </table>
-              </div> </div> </div>
+                        </div>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className='self-end'>
+                <Pagination
+                  totalRows={NFTTransactionRows?.length}
+                  page={page}
+                  rowsPerPage={rowsPerPage}
+                  onPageChange={handleChangePage}
+                />
+              </div>
+              <div className='self-end mt-4'>
+                <div className='font-DM+sans font-bold text-white text-15 leading-56 flex items-center'>
+                  {"{ Download "}
+                  <span className='font-bold text-purple-500 mx-2 cursor-pointer text-15 leading-56 flex items-center'>
+                    CSV Export
+                  </span>
+                  {" }"}
+                </div>
+              </div>
+            </div>
           </Card>
         </div>
       </div>
     </div>
   );
 }
-)
+
 export default SearchResult;

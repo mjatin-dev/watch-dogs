@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import Link from "next/link";
 interface InterfaceNav {
   handleOpen?: () => void;
   bgColor?: string | any;
@@ -26,23 +27,23 @@ export default function Nav({ bgColor, handleOpen }: InterfaceNav) {
             <img src='/logo.png' alt='Logo' className='w-55 h-61' />
           </div>
           <div className='flex items-center space-x-14'>
-            <button
-              // onClick={() => handleClick("/search")}
+            <Link
+              href='/'
               className='font-inter font-normal font-medium text-base leading-5 flex items-center text-white'
             >
               Search
-            </button>
-            <button
-              onClick={() => handleClick("/about")}
+            </Link>
+            <Link
+              href='/about'
               className='font-inter font-normal font-medium text-base leading-5 flex items-center text-white'
             >
               What is WatchDogs?
-            </button>
+            </Link>
           </div>
         </div>
         <div className='flex items-center space-x-4'>
           <div className='relative group'>
-            <button className='text-white hover:text-gray-300'>
+            <Link href='#' className='text-white hover:text-gray-300'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 className='h-6 w-6'
@@ -68,9 +69,9 @@ export default function Nav({ bgColor, handleOpen }: InterfaceNav) {
                   className='group-hover:text-gray-300'
                 />
               </svg>
-            </button>
+            </Link>
           </div>
-          {/* Account Button */}
+          {/* Account Link */}
           <div onClick={handleOpen} className='cursor-pointer  '>
             <img
               src='/avatar.png'

@@ -1,11 +1,10 @@
-import { useRouter } from "next/router";
+import Link from "next/link";
 interface interfaceSearchBar {
   value: string;
   handleChange: any;
 }
 
 const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
-  const router = useRouter();
   return (
     <div className=' flex flex-row items-center w-3/4 rounded-lg justify-between  border-2 border-gray-500 '>
       <input
@@ -15,12 +14,12 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
         placeholder='Type in ETH Address..'
         onChange={handleChange}
       />
-      <button
-        onClick={() => router.push("/searchResult")}
+      <Link
+        href='/searchResult'
         className='border-l-2 border-gray-500 px-4 h-12  font-inter font-medium text-white text-base leading-6 flex items-center justify-center '
       >
         Generate
-      </button>
+      </Link>
     </div>
   );
 };
