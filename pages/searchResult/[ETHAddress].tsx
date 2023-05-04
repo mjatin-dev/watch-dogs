@@ -1,12 +1,14 @@
-import Card from "@/components/Card";
-import Charts from "@/components/Charts";
+import Card from "@/components/shared/Card";
+import Charts from "@/components/shared/Charts";
+import { toast } from "react-toastify";
 import Nav from "@/components/Nav";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/shared/Pagination";
 import SearchBar from "@/components/SearchBar";
 import { supabase } from "@/config/supabase";
 import React, { useEffect, useState } from "react";
-import Loader from "@/components/Loader";
+import Loader from "@/components/shared/Loader";
 import { useRouter } from "next/router";
+import { ETHUrl } from "@/constants/Url";
 
 function SearchResult() {
   const dummyData: any = [
@@ -129,15 +131,15 @@ function SearchResult() {
     },
   ];
 
-  const [searchETH, setSearchETH] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [searchETH, setSearchETH] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [profitabilityRows, setProfitabilityRows] = useState<Array<any>>([]);
   const [NFTCollectionRows, setNFTCollectionRows] = useState<Array<any>>([]);
   const [NFTTransactionRows, setNFTTransactionRows] = useState<Array<any>>([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage] = useState(5);
+  const [page, setPage] = useState<number>(0);
+  const [rowsPerPage] = useState<number>(5);
   const router = useRouter();
-  const { ETHAddress } = router.query;
+  const ETHAddress = router?.query?.ETHAddress as string;
 
   useEffect(() => {
     setProfitabilityRows(dummyData);
@@ -148,13 +150,13 @@ function SearchResult() {
 
   const fetchTransactions = async () => {
     setLoading(true);
-    const API_KEY = process.env.ETHERSCAN_API_KEY;
-    const response = await fetch(
-      `https://api.etherscan.io/api?module=account&action=txlist&address=${ETHAddress}&startblock=0&endblock=99999999&sort=asc&apikey=${API_KEY}`
-    );
+    const url = ETHUrl(ETHAddress);
+    const response = await fetch(url);
     const data = await response.json();
-    if (data?.status == 1) {
+    if (data?.status === "1") {
       setNFTTransactionRows(data?.result);
+    } else {
+      toast.error(data?.result || "Something went wrong");
     }
     setLoading(false);
   };
@@ -280,7 +282,7 @@ function SearchResult() {
     type: "donut",
   };
   return (
-    <div className={`flex min-h-screen flex-col items-center bg-#0A0909`}>
+    <div className={`flex min-h-screen flex-col items-center bg-black`}>
       <Nav />
       <Loader loading={loading} />
 
@@ -297,8 +299,8 @@ function SearchResult() {
         <div className='font-DM+Sans mr-2 font-medium text-3xl  text-white '>
           Address:
         </div>
-        <p className='font-DM+Sans font-medium text-3xl leading-34 tracking-wide text-gray-500'>
-          0x123Hdedhei0001223332dju
+        <p className='font-DM+Sans font-medium  w-full truncate text-3xl leading-34 tracking-wide text-gray-500'>
+          {ETHAddress ?? "-"}
         </p>
       </div>
       <div className='grid grid-cols-2 grid-rows-4 gap-4 w-full p-10 mb-20 '>
@@ -334,8 +336,11 @@ function SearchResult() {
             <table className='w-full	'>
               {profitabilityRows?.length > 0 ? (
                 <tbody>
-                  {profitabilityRows?.map((row: any) => (
-                    <tr className='w-full hover:bg-fade hover:rounded-lg h-24'>
+                  {profitabilityRows?.map((row: any, index: number) => (
+                    <tr
+                      key={index}
+                      className='w-full hover:bg-fade hover:rounded-lg h-24'
+                    >
                       <td className='px-6 py-4'>
                         <img
                           src={row?.image}
@@ -404,6 +409,7 @@ function SearchResult() {
                   <tbody>
                     {NFTCollectionRows?.map((row: any, index: number) => (
                       <tr
+                        key={index}
                         className={`w-full ${
                           index % 2 && "bg-fade "
                         }hover:rounded-lg h-24`}
@@ -535,8 +541,9 @@ function SearchResult() {
                               page * rowsPerPage + rowsPerPage
                             )
                           : NFTTransactionRows
-                        ).map((row: any, index: number) => (
+                        ).map((row: any) => (
                           <tr
+                            key={row?.hash}
                             className={`w-full hover:bg-fade 
                         border-b-2 border-fade
                         hover:rounded-lg h-24`}
