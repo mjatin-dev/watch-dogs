@@ -38,13 +38,13 @@ export default function Nav({ bgColor }: InterfaceNav) {
             <div className='flex items-center space-x-14'>
               <Link
                 href='/'
-                className='font-inter font-normal font-medium text-base leading-5 flex items-center text-white'
+                className='font-inter font-medium text-base leading-5 flex items-center text-white'
               >
                 Search
               </Link>
               <Link
                 href='/about'
-                className='font-inter font-normal font-medium text-base leading-5 flex items-center text-white'
+                className='font-inter font-medium text-base leading-5 flex items-center text-white'
               >
                 What is WatchDogs?
               </Link>

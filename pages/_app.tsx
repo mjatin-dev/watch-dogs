@@ -3,10 +3,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { Provider } from "react-redux";
+import { store } from "@/components/ReduxStore";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <Provider store={store}>
       <Head>
         <link rel='shortcut icon' href='/logo.png' />
         <title>Watch Dogs</title>
@@ -24,6 +26,6 @@ export default function App({ Component, pageProps }: AppProps) {
         theme='dark'
       />
       <Component {...pageProps} />
-    </>
+    </Provider>
   );
 }

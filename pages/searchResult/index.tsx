@@ -7,7 +7,6 @@ import SearchBar from "@/components/SearchBar";
 import { supabase } from "@/config/supabase";
 import React, { useEffect, useState } from "react";
 import Loader from "@/components/shared/Loader";
-import { useRouter } from "next/router";
 import { ETHUrl } from "@/constants/Url";
 import {
   NFTTransactionQuery,
@@ -16,7 +15,10 @@ import {
   getBalanceQuery,
   tradesQuery,
 } from "@/constants/supabseQueries";
+import { useSelector } from "react-redux";
+
 import axios from "axios";
+import { RootState } from "@/components/ReduxStore";
 
 function SearchResult() {
   const dummyData: any = [
@@ -146,34 +148,24 @@ function SearchResult() {
   const [NFTTransactionRows, setNFTTransactionRows] = useState<Array<any>>([]);
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage] = useState<number>(5);
-  const router = useRouter();
-  const ETHAddress = router?.query?.ETHAddress as string;
-
+  const ethTransactions = useSelector(
+    (state: any) => state?.ethTransaction?.transactions
+  );
+  const ethAddress = useSelector(
+    (state: any) => state?.ethTransaction?.ethAddress
+  );
   useEffect(() => {
+    setNFTTransactionRows(ethTransactions);
     setProfitabilityRows(dummyData);
     setNFTCollectionRows(NFTCollection);
-    fetchTransactions();
     fetchData();
-  }, [ETHAddress]);
-
-  const fetchTransactions = async () => {
-    setLoading(true);
-    const url = ETHUrl(ETHAddress);
-    const response = await fetch(url);
-    const data = await response.json();
-    if (data?.status === "1") {
-      setNFTTransactionRows(data?.result);
-    } else {
-      toast.error(data?.result || "Something went wrong");
-    }
-    setLoading(false);
-  };
+  }, []);
 
   const fetchData = async () => {
     // fetchTotalBalance();
     // fetchActualProfitability();
     // fetchNFTCollections();
-    fetchNFTTransaction();
+    // fetchNFTTransaction();
   };
 
   const fetchTotalBalance = async () => {
@@ -399,7 +391,7 @@ function SearchResult() {
           Address:
         </div>
         <p className='font-DM+Sans font-medium  w-full truncate text-3xl leading-34 tracking-wide text-gray-500'>
-          {ETHAddress ?? "-"}
+          {ethAddress ?? "-"}
         </p>
       </div>
       <div className='grid grid-cols-2 grid-rows-4 gap-4 w-full p-10 mb-20 '>
