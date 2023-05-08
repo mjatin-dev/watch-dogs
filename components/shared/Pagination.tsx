@@ -13,27 +13,53 @@ const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
   rowsPerPage,
 }) => {
-  const totalPage = totalRows / rowsPerPage;
-
+  const setTotalPage = () => {
+    const temp = totalRows / rowsPerPage;
+    if (Number.isInteger(temp)) {
+      return temp - 1;
+    } else return Math.trunc(temp);
+  };
+  const totalPage = setTotalPage();
   const buttonStyles =
     "bg-fade px-6 py-3 rounded-md text-bold text-white font-DM+Sans mr-2 cursor-pointer ";
   return (
     <div className='flex  items-center mt-4'>
-      <div className={buttonStyles} onClick={() => onPageChange(0)}>
+      <div
+        className={
+          page <= 1 ? ` ${buttonStyles} text-neutral-400	` : buttonStyles
+        }
+        onClick={() => page > 1 && onPageChange(1)}
+      >
         First
       </div>
-      <div className={buttonStyles} onClick={() => onPageChange(page - 1)}>
+      <div
+        className={
+          page <= 1 ? ` ${buttonStyles} text-neutral-400	` : buttonStyles
+        }
+        onClick={() => page > 1 && onPageChange(page - 1)}
+      >
         {"<"}
       </div>
       <div className={buttonStyles}>
         Pages {page} of {totalPage}
       </div>
-      <div className={buttonStyles} onClick={() => onPageChange(page + 1)}>
+      <div
+        className={
+          page === totalPage
+            ? ` ${buttonStyles} text-neutral-400	`
+            : buttonStyles
+        }
+        onClick={() => page < totalPage && onPageChange(page + 1)}
+      >
         {">"}
       </div>
       <div
-        className={`${buttonStyles} mr-0 `}
-        onClick={() => onPageChange(totalPage)}
+        className={
+          page === totalPage
+            ? ` ${buttonStyles} text-neutral-400 mr-0	`
+            : buttonStyles
+        }
+        onClick={() => page < totalPage && onPageChange(totalPage)}
       >
         Last
       </div>

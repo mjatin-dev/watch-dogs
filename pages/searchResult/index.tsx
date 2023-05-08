@@ -146,8 +146,8 @@ function SearchResult() {
   const [profitabilityRows, setProfitabilityRows] = useState<Array<any>>([]);
   const [NFTCollectionRows, setNFTCollectionRows] = useState<Array<any>>([]);
   const [NFTTransactionRows, setNFTTransactionRows] = useState<Array<any>>([]);
-  const [page, setPage] = useState<number>(0);
-  const [rowsPerPage] = useState<number>(5);
+  const [page, setPage] = useState<number>(1);
+  const [rowsPerPage] = useState<number>(20);
   const ethTransactions = useSelector(
     (state: any) => state?.ethTransaction?.transactions
   );
