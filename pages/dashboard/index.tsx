@@ -1,12 +1,34 @@
-
 import SearchBar from "@/components/SearchBar";
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 function Dashboard() {
   const [ETHAddress, setETHAddress] = useState<string>("");
   const handleChange = (event: any) => {
     setETHAddress(event.target.value);
   };
+  useEffect(() => {
+    getDataFromPostgres();
+    getNftTransactions();
+  }, []);
+  const getDataFromPostgres = async () => {
+    const response = await fetch("/api/wallet");
+    if (response.status === 200) {
+      const data = await response.json();
+    } else {
+      const error = await response.json();
+      toast.error(error.message);
+    }
+  };
+  const getNftTransactions = async () => {
+    const response = await fetch("/api/nftTransactions");
+    if (response.status === 200) {
+      const data = await response.json();
+    } else {
+      const error = await response.json();
+      toast.error(error.message);
+    }
+  };
+
   return (
     <div className='flex min-h-screen flex-col items-center bg-black'>
       <div className='flex flex-col items-center my-20 '>

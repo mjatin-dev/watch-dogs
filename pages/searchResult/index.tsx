@@ -16,8 +16,6 @@ import {
   tradesQuery,
 } from "@/constants/supabseQueries";
 import { useSelector } from "react-redux";
-
-import axios from "axios";
 import { RootState } from "@/components/ReduxStore";
 
 function SearchResult() {
@@ -168,6 +166,7 @@ function SearchResult() {
     // fetchNFTTransaction();
   };
 
+  fetchData();
   const fetchTotalBalance = async () => {
     const walletAddress = "WALLET_ADDRESS";
     const { data, error }: any = await supabase
@@ -196,52 +195,52 @@ function SearchResult() {
     }
   };
 
-  const fetchNFTCollections = async () => {
-    const walletAddress = "WALLET_ADDRESS";
-    const { data: collectionsData, error: collectionsError } = await supabase
-      .from("wallet_transactions")
-      .select(collectionsQuery(walletAddress));
-    if (collectionsError) {
-      console.error(collectionsError);
-    } else {
-      // Loop through each collection and query the floor price
-      collectionsData.forEach(async (collection: any) => {
-        const { collection_address } = collection;
+  // const fetchNFTCollections = async () => {
+  //   const walletAddress = "WALLET_ADDRESS";
+  //   const { data: collectionsData, error: collectionsError } = await supabase
+  //     .from("wallet_transactions")
+  //     .select(collectionsQuery(walletAddress));
+  //   if (collectionsError) {
+  //     console.error(collectionsError);
+  //   } else {
+  //     // Loop through each collection and query the floor price
+  //     collectionsData.forEach(async (collection: any) => {
+  //       const { collection_address } = collection;
 
-        // Query the Alchemy API for the floor price
-        const floorPriceResponse = await axios.get(
-          `https://api.opensea.io/api/v1/assets?owner=${walletAddress}&asset_contract_address=${collection_address}&order_direction=asc&limit=1`
-        );
+  //       // Query the Alchemy API for the floor price
+  //       const floorPriceResponse = await axios.get(
+  //         `https://api.opensea.io/api/v1/assets?owner=${walletAddress}&asset_contract_address=${collection_address}&order_direction=asc&limit=1`
+  //       );
 
-        // Extract the floor price from the API response
-        const floorPrice =
-          floorPriceResponse.data?.assets?.[0]?.sell_orders?.[0]?.current_price;
+  //       // Extract the floor price from the API response
+  //       const floorPrice =
+  //         floorPriceResponse.data?.assets?.[0]?.sell_orders?.[0]?.current_price;
 
-        const { data: tradesData, error: tradesError } = await supabase
-          .from("wallet_transactions")
-          .select(tradesQuery(walletAddress, collection_address));
+  //       const { data: tradesData, error: tradesError } = await supabase
+  //         .from("wallet_transactions")
+  //         .select(tradesQuery(walletAddress, collection_address));
 
-        // Handle the trades response
-        if (tradesError) {
-          console.error(tradesError);
-        } else {
-          // Calculate the total profit for the collection
-          const totalProfit = tradesData.reduce(
-            (acc: number, trade: any) => acc + trade.profit,
-            0
-          );
-          const totalTrades = tradesData.length;
+  //       // Handle the trades response
+  //       if (tradesError) {
+  //         console.error(tradesError);
+  //       } else {
+  //         // Calculate the total profit for the collection
+  //         const totalProfit = tradesData.reduce(
+  //           (acc: number, trade: any) => acc + trade.profit,
+  //           0
+  //         );
+  //         const totalTrades = tradesData.length;
 
-          // Output the results for the collection
-          console.log(`Collection: ${collection_address}`);
-          console.log(`Floor Price: ${floorPrice}`);
-          console.log(`Total Profit: ${totalProfit}`);
-          console.log(`Total Trades: ${totalTrades}`);
-          console.log("-----------------------");
-        }
-      });
-    }
-  };
+  //         // Output the results for the collection
+  //         console.log(`Collection: ${collection_address}`);
+  //         console.log(`Floor Price: ${floorPrice}`);
+  //         console.log(`Total Profit: ${totalProfit}`);
+  //         console.log(`Total Trades: ${totalTrades}`);
+  //         console.log("-----------------------");
+  //       }
+  //     });
+  //   }
+  // };
 
   const fetchNFTTransaction = async () => {
     // NFTTransactionQuery
