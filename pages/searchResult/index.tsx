@@ -17,6 +17,8 @@ import {
 } from "@/constants/supabseQueries";
 import { useSelector } from "react-redux";
 import { RootState } from "@/components/ReduxStore";
+import moment from "moment";
+import { getTimeDiffFromNow } from "@/components/shared/formatDate";
 
 function SearchResult() {
   const dummyData: any = [
@@ -152,108 +154,29 @@ function SearchResult() {
   const ethAddress = useSelector(
     (state: any) => state?.ethTransaction?.ethAddress
   );
+  const state = useSelector((state: any) => state);
+  const { totalBalance, totalETH, totalNFT } = state?.totalBalance?.data;
   useEffect(() => {
     setNFTTransactionRows(ethTransactions);
-    setProfitabilityRows(dummyData);
+    setActualProfit();
     setNFTCollectionRows(NFTCollection);
-    fetchData();
-  }, []);
+  }, [state]);
 
-  const fetchData = async () => {
-    // fetchTotalBalance();
-    // fetchActualProfitability();
-    // fetchNFTCollections();
-    // fetchNFTTransaction();
+  const setActualProfit = () => {
+    const actualProfit = state?.actualProfit?.data;
+    const temp = actualProfit?.map((item: any) => {
+      return {
+        image: "/sample1.png",
+        col2: {
+          code: `${item?.marketplace ?? "-"} #${item?.tokenid}`,
+          time: getTimeDiffFromNow(item?.trans_date),
+        },
+        col3: item["seller fee amt"]?.toFixed(1) + "ETH",
+      };
+    });
+    setProfitabilityRows(temp);
   };
 
-  fetchData();
-  const fetchTotalBalance = async () => {
-    const walletAddress = "WALLET_ADDRESS";
-    const { data, error }: any = await supabase
-      .from("erc20_balances")
-      .select(getBalanceQuery(walletAddress));
-    if (error) {
-      console.error(error);
-      toast.error(error.message || "Something went wrong");
-    } else {
-      const totalBalance = data[0].total_balance;
-      console.log(`Total balance: ${totalBalance}`);
-    }
-  };
-  const fetchActualProfitability = async () => {
-    const walletAddress = "WALLET_ADDRESS";
-    const { data, error } = await supabase
-      .from("wallet_transactions")
-      .select(actualProfitQuery(walletAddress));
-    if (error) {
-      console.error(error);
-    } else {
-      console.log("Top 5 best closed trades:");
-      console.table(data.slice(0, 5));
-      console.log("Top 5 worst closed trades:");
-      console.table(data.slice(-5));
-    }
-  };
-
-  // const fetchNFTCollections = async () => {
-  //   const walletAddress = "WALLET_ADDRESS";
-  //   const { data: collectionsData, error: collectionsError } = await supabase
-  //     .from("wallet_transactions")
-  //     .select(collectionsQuery(walletAddress));
-  //   if (collectionsError) {
-  //     console.error(collectionsError);
-  //   } else {
-  //     // Loop through each collection and query the floor price
-  //     collectionsData.forEach(async (collection: any) => {
-  //       const { collection_address } = collection;
-
-  //       // Query the Alchemy API for the floor price
-  //       const floorPriceResponse = await axios.get(
-  //         `https://api.opensea.io/api/v1/assets?owner=${walletAddress}&asset_contract_address=${collection_address}&order_direction=asc&limit=1`
-  //       );
-
-  //       // Extract the floor price from the API response
-  //       const floorPrice =
-  //         floorPriceResponse.data?.assets?.[0]?.sell_orders?.[0]?.current_price;
-
-  //       const { data: tradesData, error: tradesError } = await supabase
-  //         .from("wallet_transactions")
-  //         .select(tradesQuery(walletAddress, collection_address));
-
-  //       // Handle the trades response
-  //       if (tradesError) {
-  //         console.error(tradesError);
-  //       } else {
-  //         // Calculate the total profit for the collection
-  //         const totalProfit = tradesData.reduce(
-  //           (acc: number, trade: any) => acc + trade.profit,
-  //           0
-  //         );
-  //         const totalTrades = tradesData.length;
-
-  //         // Output the results for the collection
-  //         console.log(`Collection: ${collection_address}`);
-  //         console.log(`Floor Price: ${floorPrice}`);
-  //         console.log(`Total Profit: ${totalProfit}`);
-  //         console.log(`Total Trades: ${totalTrades}`);
-  //         console.log("-----------------------");
-  //       }
-  //     });
-  //   }
-  // };
-
-  const fetchNFTTransaction = async () => {
-    // NFTTransactionQuery
-    const { data: walletTransactions, error } = await supabase
-      .from("wallet_transactions")
-      .select(NFTTransactionQuery);
-    if (error) {
-      console.error(error);
-      toast.error(error.message || "Something went wrong");
-    } else {
-      console.log(`walletTransactions: ${walletTransactions}`);
-    }
-  };
   const handleChangePage = (newPage: number) => {
     setPage(newPage);
   };
@@ -368,7 +291,7 @@ function SearchResult() {
       },
     },
 
-    series: [44, 55, 26],
+    series: [totalETH, totalBalance, totalNFT],
     type: "donut",
   };
   return (
@@ -399,7 +322,7 @@ function SearchResult() {
             Total Balance
           </p>
           <p className='font-DM+Sans font-bold text-5xl text-white leading-56 tracking-tight shadow-text'>
-            $101,230
+            ${totalBalance.toLocaleString() ?? "-"}
           </p>
           <div className=' w-full flex items-center justify-center'>
             <div className='h-96 w-96 flex items-center justify-center'>
@@ -419,12 +342,14 @@ function SearchResult() {
               </p>
             </div>
             <div className='font-medium text-xs flex items-center tracking-wider text-white'>
-              3M / 6 M / 12M
+              <div className='text-neutral-400 mr-2 cursor-pointer'>3M </div>/
+              <div className='text-white mx-2 cursor-pointer'>6M</div>/
+              <div className='text-white ml-2 cursor-pointer'>12M</div>
             </div>
           </div>
           <div className='h-96 overflow-auto my-2'>
-            <table className='w-full	'>
-              {profitabilityRows?.length > 0 ? (
+            {profitabilityRows?.length > 0 ? (
+              <table className='w-full	'>
                 <tbody>
                   {profitabilityRows?.map((row: any, index: number) => (
                     <tr
@@ -453,14 +378,14 @@ function SearchResult() {
                     </tr>
                   ))}
                 </tbody>
-              ) : (
-                <div className='flex w-screen my-24  items-center justify-center '>
-                  <div className='font-DM+Sans  font-bold text-7  text-white'>
-                    No data found
-                  </div>
+              </table>
+            ) : (
+              <div className='flex  my-24  items-center justify-center '>
+                <div className='font-DM+Sans  font-bold text-7  text-white'>
+                  No data found
                 </div>
-              )}
-            </table>
+              </div>
+            )}
           </div>
         </Card>
         <div className='h-20 col-span-2'>
@@ -581,7 +506,9 @@ function SearchResult() {
                 </p>
               </div>
               <div className='font-medium text-xs flex items-center tracking-wider text-white'>
-                3M / 6 M / 12M
+                <div className='text-neutral-400 mr-2 cursor-pointer'>3M </div>/
+                <div className='text-white mx-2 cursor-pointer'>6M</div>/
+                <div className='text-white ml-2 cursor-pointer'>12M</div>
               </div>
             </div>
             <div className='h-96  my-2'>

@@ -13,7 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
   if (method === "GET") {
     try {
-      const query = await client.query(`   
+      const query = await client.query(`
       select t0.buyer_address,t0.taker,t0.trans_date,t0.tx_hash,t0."seller fee amt",t0.marketplace,t0.tokenid,
       case
              when t0.taker = 'SELLER' and prev_signal is null then 0
