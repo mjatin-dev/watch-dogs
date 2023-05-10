@@ -17,13 +17,15 @@ interface InterFaceCharts {
 function Charts({ data }: InterFaceCharts) {
   const { options, series, type } = data;
   return (
-    <ReactApexChart
-      options={options}
-      series={series}
-      width='100%'
-      height={400}
-      type={type}
-    />
+    <div style={{ width: "100%", height: "100%" }}>
+      <ReactApexChart
+        options={options}
+        series={series}
+        width='100%'
+        height='100%'
+        type={type}
+      />
+    </div>
   );
 }
 

@@ -1,68 +1,15 @@
 import Card from "@/components/shared/Card";
 import Charts from "@/components/shared/Charts";
-import { toast } from "react-toastify";
+import { CSVLink } from "react-csv";
 import Nav from "@/components/Nav";
 import Pagination from "@/components/shared/Pagination";
 import SearchBar from "@/components/SearchBar";
-import { supabase } from "@/config/supabase";
 import React, { useEffect, useState } from "react";
 import Loader from "@/components/shared/Loader";
-import { ETHUrl } from "@/constants/Url";
-import {
-  NFTTransactionQuery,
-  actualProfitQuery,
-  collectionsQuery,
-  getBalanceQuery,
-  tradesQuery,
-} from "@/constants/supabseQueries";
 import { useSelector } from "react-redux";
-import { RootState } from "@/components/ReduxStore";
-import moment from "moment";
 import { getTimeDiffFromNow } from "@/components/shared/formatDate";
 
 function SearchResult() {
-  const dummyData: any = [
-    {
-      image: "/sample1.png",
-      col2: {
-        code: "Clone X  #10098",
-        time: "12 hours ago",
-      },
-      col3: "6.9 ETH",
-    },
-    {
-      image: "/sample2.png",
-      col2: {
-        code: "BAYC  #14563",
-        time: "10 days ago",
-      },
-      col3: "6.9 ETH",
-    },
-    {
-      image: "/sample3.png",
-      col2: {
-        code: "CryptoPunks  #124",
-        time: "78 days ago",
-      },
-      col3: "6.9 ETH",
-    },
-    {
-      image: "/sample1.png",
-      col2: {
-        code: "Clone X  #10098",
-        time: "90 days ago",
-      },
-      col3: "6.9 ETH",
-    },
-    {
-      image: "/sample2.png",
-      col2: {
-        code: "CryptoPunks  #124",
-        time: "12 hours ago",
-      },
-      col3: "6.9 ETH",
-    },
-  ];
   const NFTCollection: any = [
     {
       collection: {
@@ -143,6 +90,7 @@ function SearchResult() {
 
   const [searchETH, setSearchETH] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [csvData, setCsvData] = useState<Array<any>>([]);
   const [profitabilityRows, setProfitabilityRows] = useState<Array<any>>([]);
   const [NFTCollectionRows, setNFTCollectionRows] = useState<Array<any>>([]);
   const [NFTTransactionRows, setNFTTransactionRows] = useState<Array<any>>([]);
@@ -280,10 +228,35 @@ function SearchResult() {
           },
         },
       },
+
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: "100%",
+              height: 300,
+            },
+            legend: {
+              position: "bottom",
+            },
+          },
+        },
+      ],
+      stroke: {
+        show: false,
+      },
       legend: {
         position: "bottom",
+        markers: {
+          radius: 0,
+        },
         labels: {
           colors: "#FFFFFF",
+        },
+        itemMargin: {
+          horizontal: 16,
+          vertical: 0,
         },
       },
       dataLabels: {
@@ -293,6 +266,33 @@ function SearchResult() {
 
     series: [totalETH, totalBalance, totalNFT],
     type: "donut",
+  };
+  const generateCsvData = () => {
+    const headers = [
+      "Hash",
+      "From",
+      "To",
+      "Value",
+      "Gas Price",
+      "Gas",
+      "Block Number",
+      "Timestamp",
+    ];
+    const selectedKeys = [
+      "hash",
+      "from",
+      "to",
+      "value",
+      "gasPrice",
+      "gas",
+      "blockNumber",
+      "timestamp",
+    ];
+    const formattedData = NFTTransactionRows.map((obj) => {
+      return selectedKeys.map((key) => obj[key]);
+    });
+
+    setCsvData([headers, ...formattedData]);
   };
   return (
     <div className={`flex min-h-screen flex-col items-center bg-black`}>
@@ -312,82 +312,90 @@ function SearchResult() {
         <div className='font-DM+Sans mr-2 font-medium text-3xl  text-white '>
           Address:
         </div>
-        <p className='font-DM+Sans font-medium  w-full truncate text-3xl leading-34 tracking-wide text-gray-500'>
+        <p className='font-DM+Sans font-medium  w-screen truncate text-3xl leading-34 tracking-wide text-gray-500'>
           {ethAddress ?? "-"}
         </p>
       </div>
-      <div className='grid grid-cols-2 grid-rows-4 gap-4 w-full p-10 mb-20 '>
-        <Card>
-          <p className='font-DM+Sans  mb-2 font-medium text-4xl leading-14 tracking-tighter text-white'>
-            Total Balance
-          </p>
-          <p className='font-DM+Sans font-bold text-5xl text-white leading-56 tracking-tight shadow-text'>
-            ${totalBalance.toLocaleString() ?? "-"}
-          </p>
-          <div className=' w-full flex items-center justify-center'>
-            <div className='h-96 w-96 flex items-center justify-center'>
-              <Charts data={donutChartData} />
-            </div>
-          </div>
-        </Card>
-
-        <Card>
-          <div className='flex flex-row justify-between items-start'>
-            <div>
-              <p className='font-DM+Sans mb-2 font-medium text-4xl leading-14 tracking-tighter text-white'>
-                Actual Profitability
-              </p>
-              <p className='font-DM+Sans font-bold text-5xl text-neonGreen leading-56 tracking-tight shadow-text'>
-                + $20,457
-              </p>
-            </div>
-            <div className='font-medium text-xs flex items-center tracking-wider text-white'>
-              <div className='text-neutral-400 mr-2 cursor-pointer'>3M </div>/
-              <div className='text-white mx-2 cursor-pointer'>6M</div>/
-              <div className='text-white ml-2 cursor-pointer'>12M</div>
-            </div>
-          </div>
-          <div className='h-96 overflow-auto my-2'>
-            {profitabilityRows?.length > 0 ? (
-              <table className='w-full	'>
-                <tbody>
-                  {profitabilityRows?.map((row: any, index: number) => (
-                    <tr
-                      key={index}
-                      className='w-full hover:bg-fade hover:rounded-lg h-24'
-                    >
-                      <td className='px-6 py-4'>
-                        <img
-                          src={row?.image}
-                          className='w-16 h-16 rounded-lg bg-center bg-cover'
-                        />
-                      </td>
-                      <td className='px-6 py-4 '>
-                        <div className='font-DM+Sans font-bold text-7 leading-56 flex items-center tracking-wide text-white'>
-                          {row?.col2?.code ?? "-"}
-                        </div>
-                        <p className='font-medium text-5 leading-56 flex items-center text-orange-500'>
-                          {row?.col2?.time ?? "-"}
-                        </p>
-                      </td>
-                      <td className='px-6 py-4 '>
-                        <div className='font-DM+Sans font-bold text-7  text-white'>
-                          {row?.col3 ?? "-"}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <div className='flex  my-24  items-center justify-center '>
-                <div className='font-DM+Sans  font-bold text-7  text-white'>
-                  No data found
-                </div>
+      <div className='grid grid-cols-2  grid-rows-4 gap-4 w-full p-10 mb-20 '>
+        <div className='col-span-2 md:col-span-1'>
+          <Card height='h-full'>
+            <p className='font-DM+Sans  mb-2 font-medium text-4xl leading-14 tracking-tighter text-white'>
+              Total Balance
+            </p>
+            <p className='font-DM+Sans font-bold text-5xl text-white leading-56 tracking-tight shadow-text'>
+              ${totalBalance.toLocaleString() ?? "-"}
+            </p>
+            <div className=' w-full flex items-center justify-center'>
+              <div className='h-96 w-96 flex items-center justify-center'>
+                <Charts data={donutChartData} />
               </div>
-            )}
-          </div>
-        </Card>
+            </div>
+          </Card>
+        </div>
+
+        <div className='col-span-2 md:col-span-1'>
+          <Card>
+            <div className='flex flex-row justify-between items-start'>
+              <div>
+                <p className='font-DM+Sans mb-2 font-medium text-4xl leading-14 tracking-tighter text-white'>
+                  Actual Profitability
+                </p>
+                <p className='font-DM+Sans font-bold text-5xl text-neonGreen leading-56 tracking-tight shadow-text'>
+                  + $20,457
+                </p>
+              </div>
+              <div className='font-medium text-xs flex items-center tracking-wider text-white'>
+                <div className='text-white mr-2 cursor-pointer'>3M </div>/
+                <div className='text-neutral-400 mx-2 cursor-pointer'>6M</div>/
+                <div className='text-neutral-400 ml-2 cursor-pointer'>12M</div>
+              </div>
+            </div>
+            <div className='h-96 overflow-auto my-2'>
+              {profitabilityRows?.length > 0 ? (
+                <table className='w-full	'>
+                  <tbody>
+                    {profitabilityRows?.map((row: any, index: number) => (
+                      <tr
+                        key={index}
+                        className='w-full hover:bg-fade hover:rounded-lg h-24'
+                      >
+                        <td className='px-6 py-4 flex items-center '>
+                          <div className='mr-10'>
+                            <img
+                              src={row?.image}
+                              className='w-16 h-16 rounded-lg bg-center bg-cover'
+                            />
+                          </div>
+
+                          <div>
+                            <div className='font-DM+Sans font-bold text-7 leading-56 flex items-center tracking-wide text-white'>
+                              {row?.col2?.code ?? "-"}
+                            </div>
+                            <p className='font-medium text-5 leading-56 flex items-center text-orange-500'>
+                              {row?.col2?.time ?? "-"}
+                            </p>
+                          </div>
+                        </td>
+                        <td className='px-6 py-4 '>
+                          <div className='font-DM+Sans font-bold text-7  text-white'>
+                            {row?.col3 ?? "-"}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className='flex  my-24  items-center justify-center '>
+                  <div className='font-DM+Sans  font-bold text-7  text-white'>
+                    No data found
+                  </div>
+                </div>
+              )}
+            </div>
+          </Card>
+        </div>
+
         <div className='h-20 col-span-2'>
           <Card>
             <div className='flex flex-row justify-between items-start'>
@@ -506,9 +514,9 @@ function SearchResult() {
                 </p>
               </div>
               <div className='font-medium text-xs flex items-center tracking-wider text-white'>
-                <div className='text-neutral-400 mr-2 cursor-pointer'>3M </div>/
-                <div className='text-white mx-2 cursor-pointer'>6M</div>/
-                <div className='text-white ml-2 cursor-pointer'>12M</div>
+                <div className='text-white mr-2 cursor-pointer'>3M </div>/
+                <div className='text-neutral-400 mx-2 cursor-pointer'>6M</div>/
+                <div className='text-neutral-400 ml-2 cursor-pointer'>12M</div>
               </div>
             </div>
             <div className='h-96  my-2'>
@@ -622,11 +630,16 @@ function SearchResult() {
                 />
               </div>
               <div className='self-end mt-4'>
-                <div className='font-DM+sans font-bold text-white text-15 leading-56 flex items-center'>
+                <div
+                  onClick={generateCsvData}
+                  className='font-DM+sans font-bold text-white text-15 leading-56 flex items-center'
+                >
                   {"{ Download "}
-                  <span className='font-bold text-purple-500 mx-2 cursor-pointer text-15 leading-56 flex items-center'>
-                    CSV Export
-                  </span>
+                  <CSVLink data={csvData} filename={"transactions.csv"}>
+                    <span className='font-bold text-purple-500 mx-2 cursor-pointer text-15 leading-56 flex items-center'>
+                      CSV Export
+                    </span>
+                  </CSVLink>
                   {" }"}
                 </div>
               </div>

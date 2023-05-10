@@ -21,12 +21,14 @@ const Pagination: React.FC<PaginationProps> = ({
   };
   const totalPage = setTotalPage();
   const buttonStyles =
-    "bg-fade px-6 py-3 rounded-md text-bold text-white font-DM+Sans mr-2 cursor-pointer ";
+    "bg-fade px-6 py-3 rounded-md text-bold  font-DM+Sans mr-2 cursor-pointer ";
   return (
     <div className='flex  items-center mt-4'>
       <div
         className={
-          page <= 1 ? ` ${buttonStyles} text-neutral-400	` : buttonStyles
+          page <= 1
+            ? ` ${buttonStyles} text-neutral-400 cursor-not-allowed	`
+            : buttonStyles + "text-white"
         }
         onClick={() => page > 1 && onPageChange(1)}
       >
@@ -34,7 +36,9 @@ const Pagination: React.FC<PaginationProps> = ({
       </div>
       <div
         className={
-          page <= 1 ? ` ${buttonStyles} text-neutral-400	` : buttonStyles
+          page <= 1
+            ? ` ${buttonStyles} text-neutral-400	cursor-not-allowed`
+            : buttonStyles + "text-white"
         }
         onClick={() => page > 1 && onPageChange(page - 1)}
       >
@@ -46,8 +50,8 @@ const Pagination: React.FC<PaginationProps> = ({
       <div
         className={
           page === totalPage
-            ? ` ${buttonStyles} text-neutral-400	`
-            : buttonStyles
+            ? ` ${buttonStyles} text-neutral-400	cursor-not-allowed`
+            : buttonStyles + "text-white"
         }
         onClick={() => page < totalPage && onPageChange(page + 1)}
       >
@@ -56,8 +60,8 @@ const Pagination: React.FC<PaginationProps> = ({
       <div
         className={
           page === totalPage
-            ? ` ${buttonStyles} text-neutral-400 mr-0	`
-            : buttonStyles
+            ? ` ${buttonStyles} text-neutral-400 cursor-not-allowed mr-0	`
+            : buttonStyles + "text-white"
         }
         onClick={() => page < totalPage && onPageChange(totalPage)}
       >
