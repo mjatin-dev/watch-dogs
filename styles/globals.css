@@ -7,7 +7,8 @@
 
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
-  width: 15px;
+  width: 10px;
+  height:10px
 }
 
 *::-webkit-scrollbar-track {
@@ -17,7 +18,7 @@
 
 *::-webkit-scrollbar-thumb {
   background-color: #D8D8D8;
-  border-radius: 14px;
+  border-radius: 10px;
 }
 @tailwind components;
 @tailwind utilities;

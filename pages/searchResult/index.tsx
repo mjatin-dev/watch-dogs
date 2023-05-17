@@ -1,7 +1,6 @@
 import Card from "@/components/shared/Card";
 import Charts from "@/components/shared/Charts";
 import { CSVLink } from "react-csv";
-import Nav from "@/components/Nav";
 import Pagination from "@/components/shared/Pagination";
 import SearchBar from "@/components/SearchBar";
 import React, { useEffect, useState } from "react";
@@ -307,19 +306,17 @@ function SearchResult() {
     <div
       className={`flex min-h-screen w-full flex-col items-center justify-center bg-black`}
     >
-      <Nav />
       <Loader loading={loading} />
-      <div className='lg:px-16 xl:px-36 w-full h-full mb-10 '>
-        <div className='flex mb-20 flex-col items-center w-full'>
-          <div
-            className='w-956 h-146 mb-10 mt-20 font-inter font-medium text-white text-4xl leading-11 flex items-center 
+      <div className='flex my-20 flex-col items-center w-full'>
+        <div
+          className='w-956 h-146 mb-10 mt-20 font-inter font-medium text-white text-4xl leading-11 flex items-center 
          justify-center'
-          >
-            WatchDogs
-          </div>
-          <SearchBar value={searchETH} handleChange={handleChange} />
+        >
+          WatchDogs
         </div>
-
+        <SearchBar value={searchETH} handleChange={handleChange} />
+      </div>
+      <div className='lg:px-16 xl:px-36 w-full h-full mb-10 '>
         <div className='flex flex-row items-center self-start ml-10 '>
           <div className='font-DM+Sans mr-2 font-medium text-2xl  text-white '>
             Address:

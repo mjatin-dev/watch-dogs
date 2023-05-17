@@ -8,7 +8,7 @@ function Dashboard() {
 
   return (
     <div className='flex min-h-full flex-1 flex-col items-center bg-black'>
-      <div className='flex flex-col items-center my-20 '>
+      <div className='flex flex-col items-center mb-20 mt-40 '>
         <img
           src='/Watchdogs.png'
           alt='Watchdogs'

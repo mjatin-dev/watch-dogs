@@ -1,10 +1,8 @@
-import Nav from "@/components/Nav";
 import React from "react";
 
 function About() {
   return (
-    <div className=' fixed inset-0  bg-gradient-to-tr from-yellow-400 via-purple-800 to-black h-screen '>
-      <Nav bgColor='black' />
+    <div className=' fixed inset-0 mt-20 bg-gradient-to-tr from-yellow-400 via-purple-800 to-black h-screen '>
       <div className='w-full h-full  overflow-y-scroll'>
         <div className='flex flex-col items-center w-full h-auto mb-40'>
           <div className='w-658.31 h-146 flex items-center justify-center my-10 '>
@@ -13,7 +11,7 @@ function About() {
             </h1>
           </div>
           <div className=' bg-black rounded-lg p-12 w-3/5 h-4/5  rounded-40'>
-            <h2 className='text-white text-lg font-bold mb-4 font-inter font-medium leading-7 tracking-tighter text-white'>
+            <h2 className='text-lg font-bold mb-4 font-inter leading-7 tracking-tighter text-white'>
               Transparency..
             </h2>
             <div className='font-inter text-md leading-8 font-medium tracking-tighter text-white'>

@@ -5,6 +5,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { Provider } from "react-redux";
 import { store } from "@/components/ReduxStore";
+import Layout from "@/components/Layout";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -13,19 +14,21 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel='shortcut icon' href='/logo.png' />
         <title>Watch Dogs</title>
       </Head>
-      <ToastContainer
-        position='top-right'
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme='dark'
-      />
-      <Component {...pageProps} />
+      <Layout>
+        <ToastContainer
+          position='top-right'
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme='dark'
+        />
+        <Component {...pageProps} />
+      </Layout>
     </Provider>
   );
 }
