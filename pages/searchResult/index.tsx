@@ -114,6 +114,7 @@ function SearchResult() {
 
   const setActualProfit = () => {
     const actualProfit = state?.actualProfit?.data;
+    console.log("actualProfit", actualProfit);
     const temp = actualProfit?.map((item: any) => {
       return {
         image: "/sample1.png",
@@ -556,22 +557,22 @@ function SearchResult() {
                           <th className='px-6 py-3 font-DM+Sans font-bold text-2xl text-white '>
                             Txn Hash
                           </th>
-                          <th className='px-6 py-3 font-DM+Sans font-bold text-2xl text-white '>
+                          <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
                             Date
                           </th>
-                          <th className='px-6 py-3 font-DM+Sans font-bold text-2xl text-white '>
+                          <th className='px-6 py-3 font-DM+Sans text-center marker:font-bold text-2xl text-white '>
                             From
                           </th>
-                          <th className='px-6 py-3 font-DM+Sans font-bold text-2xl text-white '>
+                          <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
                             to
                           </th>
-                          <th className='px-6 py-3 font-DM+Sans font-bold text-2xl text-white '>
+                          <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
                             Token ID
                           </th>
-                          <th className='px-6 py-3 font-DM+Sans font-bold text-2xl text-white '>
+                          <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
                             Profit / Loss
                           </th>
-                          <th className='px-6 py-3 font-DM+Sans font-bold text-2xl text-white '>
+                          <th className='px-6 py-3 font-DM+Sans font-bold text-center text-2xl text-white '>
                             Type
                           </th>
                         </tr>
@@ -597,17 +598,17 @@ function SearchResult() {
                                 </div>
                               </td>
                               <td className='px-6 py-4 text-center '>
-                                <div className='font-DM+Sans  w-60 truncate mr-6 font-bold text-xl  text-white'>
+                                <div className='font-DM+Sans  w-60 truncate  font-bold text-xl  text-white'>
                                   {row?.timeStamp ?? "-"}
                                 </div>
                               </td>
                               <td className='px-6 py-4  text-center'>
-                                <div className='font-DM+Sans mr-6   w-60 truncate font-medium text-xl  text-white'>
+                                <div className='font-DM+Sans    w-60 truncate font-medium text-xl  text-white'>
                                   {row?.from ?? "-"}
                                 </div>
                               </td>
                               <td className='px-6 py-4  text-center'>
-                                <div className='font-DM+Sans mr-6  w-60 truncate font-medium text-xl  text-white'>
+                                <div className='font-DM+Sans   w-60 truncate font-medium text-xl  text-white'>
                                   {row?.to ?? "-"}
                                 </div>
                               </td>
@@ -617,12 +618,12 @@ function SearchResult() {
                                 </div>
                               </td>
                               <td className='px-6 py-4  text-center'>
-                                <div className='font-DM+Sans mr-6  w-60 truncate font-medium text-xl  text-neonGreen'>
+                                <div className='font-DM+Sans   w-60 truncate font-medium text-xl  text-neonGreen'>
                                   +2.53 ETH
                                 </div>
                               </td>
                               <td className='px-6 py-4  text-center'>
-                                <div className='font-DM+Sans mr-6  w-60 truncate font-medium text-xl  text-white'>
+                                <div className='font-DM+Sans   w-60 truncate font-medium text-xl  text-white'>
                                   ERC-721
                                 </div>
                               </td>

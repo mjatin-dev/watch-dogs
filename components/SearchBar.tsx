@@ -19,6 +19,8 @@ import { addNftTransactions } from "./ReduxStore/NftTranscation/Actions";
 import { ADD_NFT_TRANSACTION } from "./ReduxStore/NftTranscation/Types";
 import { addActualProfit } from "./ReduxStore/ActualProfit/Actions";
 import { ADD_DATA } from "./ReduxStore/ActualProfit/Types";
+import { addNftCollections } from "./ReduxStore/NftCollections/Actions";
+import { ADD_COLLECTIONS } from "./ReduxStore/NftCollections/Types";
 interface interfaceSearchBar {
   value: string;
   handleChange: any;
@@ -35,6 +37,7 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
       getTotalBalance();
       getNftTransactions();
       getActualProfit();
+      getNftCollections();
       fetchTransactions(value);
     } else {
       toast.warning("Please enter ETH Address");
@@ -56,6 +59,17 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
     if (response.status === 200) {
       const data = await response.json();
       dispatch(addNftTransactions(data, ADD_NFT_TRANSACTION));
+    } else {
+      const error = await response.json();
+      toast.error(error.message);
+    }
+  };
+  const getNftCollections = async () => {
+    const response = await fetch("/api/nftCollections");
+    if (response.status === 200) {
+      const data = await response.json();
+      console.log("data", data);
+      dispatch(addNftCollections(data, ADD_COLLECTIONS));
     } else {
       const error = await response.json();
       toast.error(error.message);

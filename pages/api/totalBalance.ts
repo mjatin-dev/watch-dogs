@@ -16,10 +16,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       var totalETH = 0;
       var totalNFT = 0;
       const ETHquery = `
-      select * from wallet_balances where wallet_address = '0x69bAb6810fa99475854bca0A3DD72aE6a0728ECE'
+      select * from wallet_balances where wallet_address = '${process.env.WALLET_ADDRESS}'
     `;
       const NFTquery = `
-    select * from wallet_balances_nft where wallet_address = '0x69bAb6810fa99475854bca0A3DD72aE6a0728ECE'
+    select * from wallet_balances_nft where wallet_address = '${process.env.WALLET_ADDRESS}'
   `;
       const ETHresponse = await client.query(ETHquery);
       if (ETHresponse) {
