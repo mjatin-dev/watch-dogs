@@ -13,13 +13,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
   if (method === "GET") {
     try {
+      const { walletAddress }: any = req.query;
+
       var totalETH = 0;
       var totalNFT = 0;
       const ETHquery = `
-      select * from wallet_balances where wallet_address = '${process.env.WALLET_ADDRESS}'
+      select * from wallet_balances where wallet_address = '${walletAddress}'
     `;
       const NFTquery = `
-    select * from wallet_balances_nft where wallet_address = '${process.env.WALLET_ADDRESS}'
+    select * from wallet_balances_nft where wallet_address = '${walletAddress}'
   `;
       const ETHresponse = await client.query(ETHquery);
       if (ETHresponse) {

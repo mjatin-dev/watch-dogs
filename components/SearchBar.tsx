@@ -31,59 +31,72 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
   const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
 
-  const generate = () => {
+  const generateAndNavigate = async () => {
     setLoading(true);
     if (value) {
-      getTotalBalance();
-      getNftTransactions();
-      getActualProfit();
-      getNftCollections();
-      fetchTransactions(value);
+      try {
+        getTotalBalance(value);
+        getNftTransactions();
+        getActualProfit();
+        getNftCollections(value);
+        fetchTransactions(value);
+        setLoading(false);
+        router.push(`/searchResult`);
+      } catch (error: any) {
+        toast.error(error || "Something went wrong");
+        setLoading(false);
+      }
     } else {
       toast.warning("Please enter ETH Address");
       setLoading(false);
     }
   };
-  const getTotalBalance = async () => {
-    const response = await fetch("/api/totalBalance");
+  const getTotalBalance = async (value: string) => {
+    const walletAddress = value;
+
+    const response = await fetch(
+      `/api/totalBalance?walletAddress=${walletAddress}`
+    );
     if (response.status === 200) {
       const data = await response.json();
       dispatch(addTotalBalance(data, ADD_TOTAL_BALANCE));
     } else {
-      const error = await response.json();
-      toast.error(error.message);
+      const { error } = await response.json();
+      throw new Error(error);
     }
   };
   const getNftTransactions = async () => {
-    const response = await fetch("/api/nftTransactions");
+    const response = await fetch(`/api/nftTransactions`);
     if (response.status === 200) {
       const data = await response.json();
       dispatch(addNftTransactions(data, ADD_NFT_TRANSACTION));
     } else {
-      const error = await response.json();
-      toast.error(error.message);
+      const { error } = await response.json();
+      throw new Error(error);
     }
   };
-  const getNftCollections = async () => {
-    const response = await fetch("/api/nftCollections");
+  const getNftCollections = async (value: string) => {
+    const walletAddress = value;
+    const response = await fetch(
+      `/api/nftCollections?page=1&walletAddress=${walletAddress}`
+    );
     if (response.status === 200) {
       const data = await response.json();
-      console.log("data", data);
       dispatch(addNftCollections(data, ADD_COLLECTIONS));
     } else {
-      const error = await response.json();
-      toast.error(error.message);
+      const { error } = await response.json();
+      throw new Error(error);
     }
   };
   const getActualProfit = async () => {
-    const response = await fetch("/api/actualProfit");
+    const response = await fetch("/api/actualProfit?3");
     if (response.status === 200) {
       const data = await response.json();
       const topTenResults = data?.slice(0, 10);
       dispatch(addActualProfit(topTenResults, ADD_DATA));
     } else {
-      const error = await response.json();
-      toast.error(error.message);
+      const { error } = await response.json();
+      throw new Error(error);
     }
   };
 
@@ -92,13 +105,11 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
     const response = await fetch(url);
     const data = await response.json();
     if (data?.status === "1") {
-      router.push(`/searchResult`);
       dispatch(addEthAddress(ETHAddress, ADD_ETH_ADDRESS));
       dispatch(addTransactions(data?.result, ADD_TRANSACTION));
     } else {
-      toast.error(data?.result || "Invalid ETH Address");
+      throw new Error(data?.result);
     }
-    setLoading(false);
   };
   return (
     <div className=' flex flex-row items-center w-3/4 rounded-lg justify-between  border-2 border-gray-500 '>
@@ -111,7 +122,7 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
       />
 
       <button
-        onClick={() => !loading && generate()}
+        onClick={() => !loading && generateAndNavigate()}
         className='border-l-2 border-gray-500  w-28 px-4 h-12  font-inter font-medium text-white text-base leading-6 flex items-center justify-center '
       >
         {loading ? (

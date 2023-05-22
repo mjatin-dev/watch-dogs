@@ -4,7 +4,7 @@ interface CardProps {
   height?: string;
 }
 
-function Card({ children, height = "h-auto" }: CardProps) {
+function Card({ children, height = "h-full" }: CardProps) {
   return (
     <div className={`bg-card ${height} shadow-xl rounded-xl p-8`}>
       {children}
