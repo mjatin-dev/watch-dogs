@@ -89,11 +89,10 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
     }
   };
   const getActualProfit = async () => {
-    const response = await fetch("/api/actualProfit?3");
+    const response = await fetch("/api/actualProfit?filter=3");
     if (response.status === 200) {
       const data = await response.json();
-      const topTenResults = data?.slice(0, 10);
-      dispatch(addActualProfit(topTenResults, ADD_DATA));
+      dispatch(addActualProfit(data, ADD_DATA));
     } else {
       const { error } = await response.json();
       throw new Error(error);

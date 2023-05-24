@@ -10,7 +10,8 @@ module.exports = {
       colors: {
         card: "#333639",
         neonGreen: "#2de93f",
-        fade: "rgba(255, 255, 255, 0.1);",
+        fade: "rgba(255, 255, 255, 0.1)",
+        noData: "#B0B0B0",
       },
       fontFamily: {
         body: ["DM+Sans"],

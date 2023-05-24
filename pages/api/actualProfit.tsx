@@ -1,3 +1,4 @@
+import moment from "moment";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "pg";
 
@@ -27,7 +28,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         from wallet_transactions
       ) as t0
     `);
-      res.status(200).json(query.rows);
+      const currentDate = new Date();
+      const monthsAgo = new Date();
+      monthsAgo.setMonth(currentDate.getMonth() - parseInt(filter));
+      const filteredItems = query.rows.filter((item) => {
+        const transDate = new Date(item.trans_date);
+        return transDate >= monthsAgo && transDate <= currentDate;
+      });
+
+      const limitedItems = filteredItems.slice(0, 10);
+      res.status(200).json(limitedItems);
       client.end();
       return;
     } catch (err: any) {

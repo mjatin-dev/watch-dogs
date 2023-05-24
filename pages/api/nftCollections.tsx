@@ -15,7 +15,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (method === "GET") {
     try {
       const { page, walletAddress }: any = req.query;
-      console.log("walletAddress", walletAddress);
       const itemsPerPage = 10;
       const startIndex = (Number(page) - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
@@ -23,7 +22,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const collectionsOwned: any = await queryCollectionsOwnedByUser(
         walletAddress
       );
-      console.log("collectionsOwned", collectionsOwned);
       const floorPrices = await queryFloorPrices(collectionsOwned);
 
       const paginatedData = collectionsOwned
@@ -97,7 +95,7 @@ async function queryFloorPrices(collectionsOwned: any) {
   return floorPrices;
 }
 async function fetchContractMetadata(contractAddress: string) {
-  const url = `https://eth-mainnet.g.alchemy.com/nft/v3/${apiKey}/getContractMetadata  https://api.alchemy.com/v2/contract/${contractAddress}/metadata`;
+  const url = `https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.ALCHEMY_API_KEY}/getContractMetadata  https://api.alchemy.com/v2/contract/${contractAddress}/metadata`;
   const headers = new Headers();
   headers.set("Content-Type", "application/json");
   headers.set("x-api-key", alchemyApiKey);

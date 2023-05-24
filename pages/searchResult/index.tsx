@@ -10,6 +10,9 @@ import { getTimeDiffFromNow } from "@/components/shared/formatDate";
 import { toast } from "react-toastify";
 import { addNftTransactions } from "@/components/ReduxStore/NftTranscation/Actions";
 import { ADD_NFT_TRANSACTION } from "@/components/ReduxStore/NftTranscation/Types";
+import NoData from "@/components/shared/NoData";
+import { addActualProfit } from "@/components/ReduxStore/ActualProfit/Actions";
+import { ADD_DATA } from "@/components/ReduxStore/ActualProfit/Types";
 
 function SearchResult() {
   const NFTCollection: any = [
@@ -143,6 +146,46 @@ function SearchResult() {
 
     fetchData();
   }, [nftCollection?.currentPage]);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const response = await fetch(
+        `/api/actualProfit?filter=${filters?.actualProfit}`
+      );
+      if (response.status === 200) {
+        const data = await response.json();
+        dispatch(addActualProfit(data, ADD_DATA));
+        setActualProfit();
+        setLoading(false);
+      } else {
+        const error = await response.json();
+        toast.error(error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [filters?.actualProfit]);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const response = await fetch(
+        `/api/nftTransactions?filter=${filters?.nftTransaction}`
+      );
+      if (response.status === 200) {
+        const data = await response.json();
+        dispatch(addNftTransactions(data, ADD_NFT_TRANSACTION));
+        setLoading(false);
+      } else {
+        const error = await response.json();
+        toast.error(error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [filters?.nftTransaction]);
+
   const setActualProfit = () => {
     const actualProfit = state?.actualProfit?.data;
     const temp = actualProfit?.map((item: any) => {
@@ -365,13 +408,20 @@ function SearchResult() {
                 Total Balance
               </p>
               <p className='font-DM+Sans font-bold text-4xl text-white leading-56 tracking-tight shadow-text'>
-                ${totalBalance.toLocaleString() ?? "-"}
+                {(totalBalance !== 0 && "$" + totalBalance.toLocaleString()) ??
+                  "-"}
               </p>
-              <div className=' w-full flex items-center justify-center'>
-                <div className='h-96 w-96 flex items-center justify-center'>
-                  {totalBalance !== 0 && <Charts data={donutChartData} />}
+              {totalBalance !== 0 ? (
+                <div className=' w-full flex items-center justify-center'>
+                  <div className='h-96 w-96 flex items-center justify-center'>
+                    <Charts data={donutChartData} />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className='flex  my-24  items-center justify-center '>
+                  <NoData />
+                </div>
+              )}
             </Card>
           </div>
 
@@ -382,9 +432,11 @@ function SearchResult() {
                   <p className='font-DM+Sans mb-2 font-medium text-3xl leading-14 tracking-tighter text-white'>
                     Actual Profitability
                   </p>
-                  <p className='font-DM+Sans font-bold text-4xl text-neonGreen leading-56 tracking-tight shadow-text'>
-                    + $20,457
-                  </p>
+                  {profitabilityRows?.length > 0 && (
+                    <p className='font-DM+Sans font-bold text-4xl text-neonGreen leading-56 tracking-tight shadow-text'>
+                      + $20,457
+                    </p>
+                  )}
                 </div>
                 <div className='font-medium text-xs flex items-center tracking-wider text-white'>
                   <div
@@ -439,7 +491,7 @@ function SearchResult() {
                             </div>
 
                             <div>
-                              <div className='font-DM+Sans font-bold text-7 leading-56 flex items-center tracking-wide text-white'>
+                              <div className='font-DM+Sans truncate w-24 font-bold text-7 leading-56 flex items-center tracking-wide text-white'>
                                 {row?.col2?.code ?? "-"}
                               </div>
                               <p className='font-medium text-5 leading-56 flex items-center text-orange-500'>
@@ -458,9 +510,7 @@ function SearchResult() {
                   </table>
                 ) : (
                   <div className='flex  my-24  items-center justify-center '>
-                    <div className='font-DM+Sans  font-bold text-7  text-white'>
-                      No data found
-                    </div>
+                    <NoData />
                   </div>
                 )}
               </div>
@@ -480,25 +530,26 @@ function SearchResult() {
                   </div>
                 </div>
                 <div className='h-96 overflow-auto my-2'>
-                  <table className='w-full min-w-max	'>
-                    <thead className='text-left text-gray-400 text-sm uppercase'>
-                      <tr>
-                        <th className='px-6 py-3 font-DM+Sans font-bold text-lg text-white '>
-                          COLLECTION
-                        </th>
-                        <th className='px-6 py-3 text-right	 font-DM+Sans font-bold text-lg text-white '>
-                          FLOOR PRICE
-                        </th>
-                        <th className='px-6 py-3 font-DM+Sans font-bold text-lg text-white '>
-                          PROFIT
-                        </th>
+                  {NFTCollectionRows?.length > 0 ? (
+                    <table className='w-full min-w-max	'>
+                      <thead className='text-left text-gray-400 text-sm uppercase'>
+                        <tr>
+                          <th className='px-6 py-3 font-DM+Sans font-bold text-lg text-white '>
+                            COLLECTION
+                          </th>
+                          <th className='px-6 py-3 text-right	 font-DM+Sans font-bold text-lg text-white '>
+                            FLOOR PRICE
+                          </th>
+                          <th className='px-6 py-3 font-DM+Sans font-bold text-lg text-white '>
+                            PROFIT
+                          </th>
 
-                        <th className='px-6 py-3 font-DM+Sans font-bold text-lg text-white '>
-                          TOTAL
-                        </th>
-                      </tr>
-                    </thead>
-                    {NFTCollectionRows?.length > 0 ? (
+                          <th className='px-6 py-3 font-DM+Sans font-bold text-lg text-white '>
+                            TOTAL
+                          </th>
+                        </tr>
+                      </thead>
+
                       <tbody>
                         {NFTCollectionRows?.map((row: any, index: number) => (
                           <tr
@@ -559,14 +610,12 @@ function SearchResult() {
                           </tr>
                         ))}
                       </tbody>
-                    ) : (
-                      <div className='flex w-screen my-24  items-center justify-center '>
-                        <div className='font-DM+Sans  font-bold text-7  text-white'>
-                          No data found
-                        </div>
-                      </div>
-                    )}
-                  </table>
+                    </table>
+                  ) : (
+                    <div className='flex  my-24  items-center justify-center '>
+                      <NoData />
+                    </div>
+                  )}
                 </div>
                 <div className='self-end'>
                   <div className='flex  items-center mt-4'>
@@ -706,35 +755,35 @@ function SearchResult() {
                     NFT Transactions
                   </p>
                   <div className='max-h-screen overflow-auto my-2'>
-                    <table className='w-full md:min-w-max mt-6	'>
-                      <thead className='text-left bg-fade h-20 text-gray-400 text-sm uppercase'>
-                        <tr>
-                          <th className='px-6 py-3 font-DM+Sans font-bold text-2xl text-white '>
-                            Txn Hash
-                          </th>
-                          <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
-                            Date
-                          </th>
-                          <th className='px-6 py-3 font-DM+Sans text-center marker:font-bold text-2xl text-white '>
-                            From
-                          </th>
-                          <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
-                            to
-                          </th>
-                          <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
-                            Token ID
-                          </th>
-                          <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
-                            Profit / Loss
-                          </th>
-                          <th className='px-6 py-3 font-DM+Sans font-bold text-center text-2xl text-white '>
-                            Type
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {NFTTransactionRows?.length > 0 ? (
-                          (rowsPerPage > 0
+                    {NFTTransactionRows?.length > 0 ? (
+                      <table className='w-full md:min-w-max mt-6	'>
+                        <thead className='text-left bg-fade h-20 text-gray-400 text-sm uppercase'>
+                          <tr>
+                            <th className='px-6 py-3 font-DM+Sans font-bold text-2xl text-white '>
+                              Txn Hash
+                            </th>
+                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
+                              Date
+                            </th>
+                            <th className='px-6 py-3 font-DM+Sans text-center marker:font-bold text-2xl text-white '>
+                              From
+                            </th>
+                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
+                              to
+                            </th>
+                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
+                              Token ID
+                            </th>
+                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
+                              Profit / Loss
+                            </th>
+                            <th className='px-6 py-3 font-DM+Sans font-bold text-center text-2xl text-white '>
+                              Type
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {(rowsPerPage > 0
                             ? NFTTransactionRows.slice(
                                 page * rowsPerPage,
                                 page * rowsPerPage + rowsPerPage
@@ -783,16 +832,14 @@ function SearchResult() {
                                 </div>
                               </td>
                             </tr>
-                          ))
-                        ) : (
-                          <div className='flex w-screen my-24  items-center justify-center '>
-                            <div className='font-DM+Sans  font-bold text-7  text-white'>
-                              No data found
-                            </div>
-                          </div>
-                        )}
-                      </tbody>
-                    </table>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <div className='flex  my-24  items-center justify-center '>
+                        <NoData />
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className='self-end'>

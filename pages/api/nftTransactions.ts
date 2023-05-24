@@ -1,3 +1,4 @@
+import moment from "moment";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "pg";
 
@@ -13,6 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
   if (method === "GET") {
     try {
+      const { filter }: any = req.query;
       const query = await client.query(`   
       select t0.buyer_address,t0.taker,t0.trans_date,t0.tx_hash,t0."seller fee amt",t0.marketplace,t0.tokenid,
       case
@@ -26,7 +28,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
          from wallet_transactions
       ) as t0
     `);
-      res.status(200).json(query.rows);
+      const monthsAgo = new Date();
+      monthsAgo.setMonth(monthsAgo.getMonth() - filter);
+
+      const filteredData = query.rows.filter((item) => {
+        const itemDate = new Date(item.trans_date);
+        return (
+          moment(itemDate).format("DD/MM/YYYY") <
+          moment(monthsAgo).format("DD/MM/YYYY")
+        );
+      });
+      res.status(200).json(filteredData);
       client.end();
       return;
     } catch (err: any) {
