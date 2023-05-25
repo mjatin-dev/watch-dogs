@@ -15,83 +15,6 @@ import { addActualProfit } from "@/components/ReduxStore/ActualProfit/Actions";
 import { ADD_DATA } from "@/components/ReduxStore/ActualProfit/Types";
 
 function SearchResult() {
-  const NFTCollection: any = [
-    {
-      collection: {
-        image: "/sample1.png",
-        name: "Clone X",
-        verified: true,
-      },
-      floorPrice: {
-        price: "10.3 ETH",
-        offer: 34,
-        positive: false,
-      },
-      profit: "10ETH",
-
-      total: 12,
-    },
-    {
-      collection: {
-        image: "/sample3.png",
-        name: "TOSHIES",
-        verified: true,
-      },
-      floorPrice: {
-        price: "10.3 ETH",
-        offer: 34,
-        positive: true,
-      },
-      profit: "10ETH",
-
-      total: 12,
-    },
-    {
-      collection: {
-        image: "/sample2.png",
-        name: "Sewer Pass",
-        verified: true,
-      },
-      floorPrice: {
-        price: "10.3 ETH",
-        offer: 34,
-        positive: false,
-      },
-      profit: "10ETH",
-
-      total: 12,
-    },
-    {
-      collection: {
-        image: "/sample1.png",
-        name: "Bored Ape Yacht Club",
-        verified: true,
-      },
-      floorPrice: {
-        price: "10.3 ETH",
-        offer: 34,
-        positive: true,
-      },
-      profit: "10ETH",
-
-      total: 12,
-    },
-    {
-      collection: {
-        image: "/sample3.png",
-        name: "CryptoPunks",
-        verified: true,
-      },
-      floorPrice: {
-        price: "10.3 ETH",
-        offer: 34,
-        positive: true,
-      },
-      profit: "10ETH",
-
-      total: 12,
-    },
-  ];
   const [searchETH, setSearchETH] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [csvData, setCsvData] = useState<Array<any>>([]);
@@ -104,10 +27,7 @@ function SearchResult() {
     actualProfit: 3,
     nftTransaction: 3,
   });
-  const [nftCollection, setNftCollection] = useState({
-    currentPage: 1,
-    totalPage: 0,
-  });
+  const [nftCollectionPage, setNftCollectionPage] = useState<number>(0);
   const dispatch = useDispatch();
   const ethTransactions = useSelector(
     (state: any) => state?.ethTransaction?.transactions
@@ -118,24 +38,28 @@ function SearchResult() {
   const state = useSelector((state: any) => state);
   const { totalBalance, totalETH, totalNFT } = state?.totalBalance?.data;
   useEffect(() => {
+    setLoading(true)
     if (ethAddress || ethTransactions) {
       if (ethTransactions) setNFTTransactionRows(ethTransactions);
       setActualProfit();
-      setNFTCollectionRows(NFTCollection);
+      setNFTCollectionRows(state?.NftCollections?.collections);
     } else toast.error("Something went wrong");
-  }, [state]);
+    setLoading(false)
+  }, [state,ethAddress]);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       const walletAddress = ethAddress;
       const response = await fetch(
-        `/api/nftTransactions?page=${nftCollection?.currentPage}&walletAddress=${walletAddress}`
+        `/api/nftTransactions?page=${
+          nftCollectionPage === 0 ? 1 : nftCollectionPage
+        }&walletAddress=${walletAddress}`
       );
 
       if (response.status === 200) {
         const data = await response.json();
-        setNftCollection({ ...nftCollection, totalPage: data?.totalPage });
         dispatch(addNftTransactions(data?.data, ADD_NFT_TRANSACTION));
+        setNFTCollectionRows(state?.NftCollections?.collections);
         setLoading(false);
       } else {
         const error = await response.json();
@@ -145,7 +69,7 @@ function SearchResult() {
     };
 
     fetchData();
-  }, [nftCollection?.currentPage]);
+  }, [nftCollectionPage]);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -525,8 +449,8 @@ function SearchResult() {
                     NFT Collections
                   </p>
 
-                  <div className='font-medium text-xs flex items-center tracking-wider text-white'>
-                    OWNED BY WALLET: 0x123Hdedhei00012htg...
+                  <div className='font-medium text-xs flex items-center tracking-wider truncate w-56 text-white'>
+                    OWNED BY WALLET: {ethAddress ?? "-"}
                   </div>
                 </div>
                 <div className='h-96 overflow-auto my-2'>
@@ -564,22 +488,21 @@ function SearchResult() {
                               </div>
 
                               <img
-                                src={row?.collection?.image}
+                                src={row?.imageUrl}
                                 className='w-16 h-16 mr-6 rounded-lg bg-center bg-cover'
                               />
                               <div className='font-DM+Sans mr-2  font-bold text-xl leading-56 flex items-center tracking-wide text-white'>
-                                {row?.collection?.name ?? "-"}
+                                {row?.name ?? "-"}
                               </div>
-                              {row?.collection?.verified && (
-                                <img src='/tick.png' className='h-7 w-7' />
-                              )}
+
+                              <img src='/tick.png' className='h-7 w-7' />
                             </td>
                             <td className='px-6 py-4 '>
                               <div className='flex flex-col items-end '>
                                 <div className='font-DM+Sans font-bold text-xl leading-56 tracking-wide text-white'>
-                                  {row?.floorPrice?.price ?? "-"}
+                                  {row?.floorPrice + "ETH" ?? "-"}
                                 </div>
-                                <div
+                                {/* <div
                                   className={` ${
                                     row?.floorPrice?.positive
                                       ? "text-neonGreen"
@@ -591,12 +514,13 @@ function SearchResult() {
                                       ? "+" + row?.floorPrice?.offer + "%"
                                       : "-" + row?.floorPrice?.offer + "%"
                                     : "-"}
-                                </div>
+                                </div> */}
+                                <div className={` h-4 `}>{""}</div>
                               </div>
                             </td>
                             <td className='px-6 py-4 '>
                               <div className='font-DM+Sans text-xl font-bold text-7  text-white'>
-                                {row?.profit ?? "-"}
+                                {row?.profit + "ETH" ?? "-"}
                               </div>
                               <div className={` h-4 `}>{""}</div>
                             </td>
@@ -619,72 +543,63 @@ function SearchResult() {
                 </div>
                 <div className='self-end'>
                   <div className='flex  items-center mt-4'>
+                    {/* <div
+                       className={
+                         nftCollection?.currentPage <= 1
+                           ? ` ${buttonStyles} text-neutral-400 cursor-not-allowed	`
+                           : buttonStyles + "text-white"
+                       }
+                       onClick={() =>
+                         setNftCollection({
+                           ...nftCollection,
+                           currentPage: 1,
+                         })
+                       }
+                     >
+                       First
+                     </div> */}
                     <div
                       className={
-                        nftCollection?.currentPage <= 1
-                          ? ` ${buttonStyles} text-neutral-400 cursor-not-allowed	`
-                          : buttonStyles + "text-white"
-                      }
-                      onClick={() =>
-                        setNftCollection({
-                          ...nftCollection,
-                          currentPage: 1,
-                        })
-                      }
-                    >
-                      First
-                    </div>
-                    <div
-                      className={
-                        nftCollection?.currentPage <= 1
+                        nftCollectionPage <= 1
                           ? ` ${buttonStyles} text-neutral-400	cursor-not-allowed`
                           : buttonStyles + "text-white"
                       }
-                      onClick={() =>
-                        setNftCollection({
-                          ...nftCollection,
-                          currentPage: nftCollection?.currentPage - 1,
-                        })
-                      }
+                      onClick={() => {
+                        if (nftCollectionPage > 0) {
+                          setNftCollectionPage(nftCollectionPage - 10);
+                        }
+                      }}
                     >
                       {"<"}
                     </div>
                     <div className={buttonStyles}>
-                      Pages {nftCollection?.currentPage} of{" "}
-                      {nftCollection?.totalPage}
+                      Rows {nftCollectionPage} to {nftCollectionPage + 10}
                     </div>
                     <div
-                      className={
-                        nftCollection?.currentPage === nftCollection?.totalPage
-                          ? ` ${buttonStyles} text-neutral-400	cursor-not-allowed`
-                          : buttonStyles + "text-white"
-                      }
+                      className={buttonStyles + "text-white"}
                       onClick={() =>
-                        setNftCollection({
-                          ...nftCollection,
-                          currentPage: nftCollection?.currentPage + 1,
-                        })
+                        setNftCollectionPage(nftCollectionPage + 10)
                       }
                     >
                       {">"}
                     </div>
-                    <div
-                      className={
-                        nftCollection?.currentPage === nftCollection?.totalPage
-                          ? ` ${buttonStyles} text-neutral-400 cursor-not-allowed mr-0	`
-                          : buttonStyles + "text-white"
-                      }
-                      onClick={() => {
-                        if (nftCollection?.totalPage !== 0) {
-                          setNftCollection({
-                            ...nftCollection,
-                            currentPage: nftCollection?.totalPage,
-                          });
-                        }
-                      }}
-                    >
-                      Last
-                    </div>
+                    {/* <div
+                       className={
+                         nftCollection?.currentPage === nftCollection?.totalPage
+                           ? ` ${buttonStyles} text-neutral-400 cursor-not-allowed mr-0	`
+                           : buttonStyles + "text-white"
+                       }
+                       onClick={() => {
+                         if (nftCollection?.totalPage !== 0) {
+                           setNftCollection({
+                             ...nftCollection,
+                             currentPage: nftCollection?.totalPage,
+                           });
+                         }
+                       }}
+                     >
+                       Last
+                     </div> */}
                   </div>
                 </div>
               </div>

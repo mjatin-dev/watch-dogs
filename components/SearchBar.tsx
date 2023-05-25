@@ -35,15 +35,17 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
     setLoading(true);
     if (value) {
       try {
-        getTotalBalance(value);
-        getNftTransactions();
-        getActualProfit();
-        getNftCollections(value);
-        fetchTransactions(value);
+        await Promise.all([
+          getTotalBalance(value),
+          getNftTransactions(value),
+          getActualProfit(),
+          getNftCollections(value),
+          fetchTransactions(value),
+        ]);
         setLoading(false);
         router.push(`/searchResult`);
       } catch (error: any) {
-        toast.error(error || "Something went wrong");
+        toast.error(error.message || "Something went wrong");
         setLoading(false);
       }
     } else {
@@ -65,14 +67,17 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
       throw new Error(error);
     }
   };
-  const getNftTransactions = async () => {
-    const response = await fetch(`/api/nftTransactions`);
+  const getNftTransactions = async (value: string) => {
+    const walletAddress = value;
+    const response = await fetch(
+      `/api/nftTransactions?walletAddress=${walletAddress}`
+    );
     if (response.status === 200) {
       const data = await response.json();
       dispatch(addNftTransactions(data, ADD_NFT_TRANSACTION));
     } else {
       const { error } = await response.json();
-      throw new Error(error);
+      return new Error(error);
     }
   };
   const getNftCollections = async (value: string) => {
