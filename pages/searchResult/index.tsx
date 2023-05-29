@@ -307,17 +307,21 @@ function SearchResult() {
       className={`flex min-h-screen w-full flex-col items-center justify-center bg-black`}
     >
       <Loader loading={loading} />
-      <div className='flex my-20 flex-col items-center w-full'>
-        <div
-          className='w-956 h-146 mb-10 mt-20 font-inter font-medium text-white text-4xl leading-11 flex items-center 
+      <div className='lg:px-24 xl:px-44 md:px-16 px-10 w-full h-full mb-10 '>
+        <div className='flex my-20 flex-col items-center w-full'>
+          <div
+            className='w-956 h-146 mb-10 mt-20 font-inter font-medium text-white text-4xl leading-11 flex items-center 
          justify-center'
-        >
-          WatchDogs
+          >
+            WatchDogs
+          </div>
+          <SearchBar
+            value={searchETH}
+            handleChange={handleChange}
+            width='w-full'
+          />
         </div>
-        <SearchBar value={searchETH} handleChange={handleChange} />
-      </div>
-      <div className='lg:px-16 xl:px-36 w-full h-full mb-10 '>
-        <div className='flex flex-row items-center self-start ml-10 '>
+        <div className='flex flex-row items-center self-start  '>
           <div className='font-DM+Sans mr-2 font-medium text-2xl  text-white '>
             Address:
           </div>
@@ -325,7 +329,7 @@ function SearchResult() {
             {ethAddress ?? "-"}
           </p>
         </div>
-        <div className='grid grid-cols-2  grid-rows-4 gap-4 w-full p-10 mb-20 '>
+        <div className='grid grid-cols-2  grid-rows-4 gap-4 w-full mt-10 mb-20 '>
           <div className='col-span-2 md:col-span-1 h-auto'>
             <Card>
               <p className='font-DM+Sans  mb-2 font-medium text-3xl leading-14 tracking-tighter text-white'>

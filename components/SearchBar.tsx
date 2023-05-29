@@ -23,10 +23,11 @@ import { addNftCollections } from "./ReduxStore/NftCollections/Actions";
 import { ADD_COLLECTIONS } from "./ReduxStore/NftCollections/Types";
 interface interfaceSearchBar {
   value: string;
+  width?: string;
   handleChange: any;
 }
 
-const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
+const SearchBar = ({ handleChange, value, width }: interfaceSearchBar) => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
@@ -117,7 +118,11 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
     }
   };
   return (
-    <div className=' flex flex-row items-center  sm:w-full md:w-3/4 lg:w-3/4 xl:w-3/4 2xl:w-1/2 rounded-lg justify-between  border-2 border-gray-500 '>
+    <div
+      className={` flex flex-row items-center  ${
+        width ? width : "sm:w-full md:w-3/4 lg:w-3/4 xl:w-3/4 2xl:w-1/2"
+      } rounded-lg justify-between  border-2 border-gray-500 `}
+    >
       <input
         value={value}
         className=' h-12 px-4 pr-12 grow bg-black ml-1 focus:outline-none text-white'
