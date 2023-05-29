@@ -45,7 +45,8 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
         setLoading(false);
         router.push(`/searchResult`);
       } catch (error: any) {
-        toast.error(error.message || "Something went wrong");
+        router.push(`/searchResult`);
+        // toast.error(error.message || "Something went wrong");
         setLoading(false);
       }
     } else {
@@ -116,7 +117,7 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
     }
   };
   return (
-    <div className=' flex flex-row items-center w-3/4 rounded-lg justify-between  border-2 border-gray-500 '>
+    <div className=' flex flex-row items-center  sm:w-full md:w-3/4 lg:w-3/4 xl:w-3/4 2xl:w-1/2 rounded-lg justify-between  border-2 border-gray-500 '>
       <input
         value={value}
         className=' h-12 px-4 pr-12 grow bg-black ml-1 focus:outline-none text-white'
@@ -127,7 +128,7 @@ const SearchBar = ({ handleChange, value }: interfaceSearchBar) => {
 
       <button
         onClick={() => !loading && generateAndNavigate()}
-        className='border-l-2 border-gray-500  w-28 px-4 h-12  font-inter font-medium text-white text-base leading-6 flex items-center justify-center '
+        className='border-l-2 border-gray-500  min-w-28 px-4 h-12 bg-black font-inter font-medium text-white text-base leading-6 flex items-center justify-center '
       >
         {loading ? (
           <Loader loading={loading} screenSize='h-full' />

@@ -8,6 +8,7 @@ export default function Nav() {
   const [background, setBackground] = useState<string>("");
   const router = useRouter();
   const pathname = router.pathname;
+
   useEffect(() => {
     if (pathname === "/about") {
       setBackground(`bg-black h-20 w-full`);
@@ -16,13 +17,14 @@ export default function Nav() {
         `bg-gradient-to-bl from-yellow-400 via-purple-800 to-black h-20 w-full`
       );
     }
+    const timer = setTimeout(() => {
+      setShow(true);
+    }, 5000);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   const handleClose = () => {
     setShow(false);
-  };
-  const handleOpen = () => {
-    setShow(true);
   };
 
   const handleClick = (path: string) => {
@@ -37,7 +39,7 @@ export default function Nav() {
         >
           <div className='flex items-center space-x-20 '>
             <div className='cursor-pointer  ' onClick={() => handleClick("/")}>
-              <img src='/logo.png' alt='Logo' className='w-55 h-61' />
+              <img src='/logo.png' alt='Logo' className='w-auto h-12' />
             </div>
             <div className='flex items-center space-x-14'>
               <Link
@@ -52,45 +54,6 @@ export default function Nav() {
               >
                 What is WatchDogs?
               </Link>
-            </div>
-          </div>
-          <div className='flex items-center space-x-4'>
-            <div className='relative group'>
-              <Link href='#' className='text-white hover:text-gray-300'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='h-6 w-6'
-                  viewBox='0 0 20 20'
-                  fill='currentColor'
-                >
-                  <circle
-                    cx='10'
-                    cy='10'
-                    r='1.5'
-                    className='group-hover:text-gray-300'
-                  />
-                  <circle
-                    cx='3'
-                    cy='10'
-                    r='1.5'
-                    className='group-hover:text-gray-300'
-                  />
-                  <circle
-                    cx='17'
-                    cy='10'
-                    r='1.5'
-                    className='group-hover:text-gray-300'
-                  />
-                </svg>
-              </Link>
-            </div>
-            {/* Account Link */}
-            <div onClick={handleOpen} className='cursor-pointer  '>
-              <img
-                src='/avatar.png'
-                alt='Avatar'
-                className='inline-block h-12 w-12 rounded-full '
-              />
             </div>
           </div>
         </nav>
