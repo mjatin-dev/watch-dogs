@@ -64,7 +64,7 @@ const SearchBar = ({ handleChange, value, width }: interfaceSearchBar) => {
       router.push(`/searchResult`);
     } else {
       setLoading(false);
-      throw new Error(data?.message);
+      throw new Error("Invalid ETH Address");
     }
   };
 
@@ -121,7 +121,7 @@ const SearchBar = ({ handleChange, value, width }: interfaceSearchBar) => {
       throw new Error(error);
     }
   };
-  
+
   return (
     <div
       className={` flex flex-row items-center  ${
@@ -138,7 +138,7 @@ const SearchBar = ({ handleChange, value, width }: interfaceSearchBar) => {
 
       <button
         onClick={() => !loading && generateAndNavigate()}
-        className='border-l-2 border-gray-500  min-w-28 px-4 h-12 bg-black font-inter font-medium text-white text-base leading-6 flex items-center justify-center '
+        className='border-l-2 border-gray-500   w-28 px-4 h-12  bg-black font-inter font-medium text-white text-base leading-6 flex items-center justify-center '
       >
         {loading ? (
           <Loader loading={loading} screenSize='h-full' />

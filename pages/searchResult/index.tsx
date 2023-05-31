@@ -307,7 +307,7 @@ function SearchResult() {
       className={`flex min-h-screen w-full flex-col items-center justify-center bg-black`}
     >
       <Loader loading={loading} />
-      <div className='lg:px-24 xl:px-44 md:px-16 px-10 w-full h-full mb-10 '>
+      <div className='lg:px-44 xl:px-60 md:px-24 px-16 w-full h-full mb-10 '>
         <div className='flex my-20 flex-col items-center w-full'>
           <div
             className='w-956 h-146 mb-10 mt-20 font-inter font-medium text-white text-4xl leading-11 flex items-center 
