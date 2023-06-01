@@ -301,7 +301,7 @@ function SearchResult() {
     setCsvData([headers, ...formattedData]);
   };
   const buttonStyles =
-    "bg-fade px-6 py-3 rounded-md text-bold  font-DM+Sans mr-2 cursor-pointer ";
+    "bg-fade px-6 py-3 text-medium rounded-md text-bold  font-DM+Sans mr-2 cursor-pointer ";
   return (
     <div
       className={`flex min-h-screen w-full flex-col items-center justify-center bg-black`}
@@ -322,10 +322,10 @@ function SearchResult() {
           />
         </div>
         <div className='flex flex-row items-center self-start  '>
-          <div className='font-DM+Sans mr-2 font-medium text-2xl  text-white '>
+          <div className='font-DM+Sans mr-2 font-medium text-large  text-white '>
             Address:
           </div>
-          <p className='font-DM+Sans font-medium w-64  md:w-96 lg:w-auto  truncate text-2xl leading-34 tracking-wide text-gray-500'>
+          <p className='font-DM+Sans font-medium w-64  md:w-96 lg:w-auto  truncate text-large leading-34 tracking-wide text-gray-500'>
             {ethAddress ?? "-"}
           </p>
         </div>
@@ -361,7 +361,7 @@ function SearchResult() {
                     Actual Profitability
                   </p>
                   {profitabilityRows?.length > 0 && (
-                    <p className='font-DM+Sans font-bold text-4xl text-neonGreen leading-56 tracking-tight shadow-text'>
+                    <p className='font-DM+Sans font-bold text-large text-neonGreen leading-56 tracking-tight shadow-text'>
                       + $20,457
                     </p>
                   )}
@@ -462,17 +462,17 @@ function SearchResult() {
                     <table className='w-full min-w-max	'>
                       <thead className='text-left text-gray-400 text-sm uppercase'>
                         <tr>
-                          <th className='px-6 py-3 font-DM+Sans font-bold text-lg text-white '>
+                          <th className='px-6 py-3 font-DM+Sans font-bold text-medium text-white '>
                             COLLECTION
                           </th>
-                          <th className='px-6 py-3 text-right	 font-DM+Sans font-bold text-lg text-white '>
+                          <th className='px-6 py-3 text-right	 font-DM+Sans font-bold text-medium text-white '>
                             FLOOR PRICE
                           </th>
-                          <th className='px-6 py-3 font-DM+Sans font-bold text-lg text-white '>
+                          <th className='px-6 py-3 font-DM+Sans font-bold text-medium text-white '>
                             PROFIT
                           </th>
 
-                          <th className='px-6 py-3 font-DM+Sans font-bold text-lg text-white '>
+                          <th className='px-6 py-3 font-DM+Sans font-bold text-medium text-white '>
                             TOTAL
                           </th>
                         </tr>
@@ -487,7 +487,7 @@ function SearchResult() {
                             }hover:rounded-lg h-24`}
                           >
                             <td className='px-6 py-4 flex flex-row items-center'>
-                              <div className='font-DM+Sans mr-6 font-bold text-xl  text-white'>
+                              <div className='font-DM+Sans mr-6 font-bold text-medium  text-white'>
                                 {index + 1}
                               </div>
 
@@ -495,15 +495,15 @@ function SearchResult() {
                                 src={row?.imageUrl}
                                 className='w-16 h-16 mr-6 rounded-lg bg-center bg-cover'
                               />
-                              <div className='font-DM+Sans mr-2  font-bold text-xl leading-56 flex items-center tracking-wide text-white'>
+                              <div className='font-DM+Sans mr-2  font-bold text-medium leading-56 flex items-center tracking-wide text-white'>
                                 {row?.name ?? "-"}
                               </div>
 
-                              <img src='/tick.png' className='h-7 w-7' />
+                              <img src='/tick.png' className='h-5 w-5' />
                             </td>
                             <td className='px-6 py-4 '>
                               <div className='flex flex-col items-end '>
-                                <div className='font-DM+Sans font-bold text-xl leading-56 tracking-wide text-white'>
+                                <div className='font-DM+Sans font-bold text-medium leading-56 tracking-wide text-white'>
                                   {row?.floorPrice + "ETH" ?? "-"}
                                 </div>
                                 {/* <div
@@ -523,13 +523,13 @@ function SearchResult() {
                               </div>
                             </td>
                             <td className='px-6 py-4 '>
-                              <div className='font-DM+Sans text-xl font-bold text-7  text-white'>
+                              <div className='font-DM+Sans text-medium font-bold text-7  text-white'>
                                 {row?.profit + "ETH" ?? "-"}
                               </div>
                               <div className={` h-4 `}>{""}</div>
                             </td>
 
-                            <td className='px-6 py-4 text-xl'>
+                            <td className='px-6 py-4 text-medium'>
                               <div className='font-DM+Sans font-bold text-7  text-white'>
                                 {row?.total ?? "-"}
                               </div>
@@ -616,7 +616,11 @@ function SearchResult() {
                   <p className='font-DM+Sans mb-2 font-medium text-3xl leading-14 tracking-tighter text-white'>
                     NFT Transactions (Profit / Loss)
                   </p>
-                  <p className='font-DM+Sans font-medium text-xl text-white leading-56 tracking-tight shadow-text'>
+                  <p
+                    className='font-DM+Sans font-medium NFT Transactions (Profit / Loss)
+
+text-white leading-56 tracking-tight shadow-text'
+                  >
                     Sales
                   </p>
                 </div>
@@ -678,25 +682,25 @@ function SearchResult() {
                       <table className='w-full md:min-w-max mt-6	'>
                         <thead className='text-left bg-fade h-20 text-gray-400 text-sm uppercase'>
                           <tr>
-                            <th className='px-6 py-3 font-DM+Sans font-bold text-2xl text-white '>
+                            <th className='px-6 py-3 font-DM+Sans font-bold text-large text-white '>
                               Txn Hash
                             </th>
-                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
+                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-large text-white '>
                               Date
                             </th>
-                            <th className='px-6 py-3 font-DM+Sans text-center marker:font-bold text-2xl text-white '>
+                            <th className='px-6 py-3 font-DM+Sans text-center marker:font-bold text-large text-white '>
                               From
                             </th>
-                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
+                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-large text-white '>
                               to
                             </th>
-                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
+                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-large text-white '>
                               Token ID
                             </th>
-                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-2xl text-white '>
+                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-large text-white '>
                               Profit / Loss
                             </th>
-                            <th className='px-6 py-3 font-DM+Sans font-bold text-center text-2xl text-white '>
+                            <th className='px-6 py-3 font-DM+Sans font-bold text-center text-large text-white '>
                               Type
                             </th>
                           </tr>
@@ -716,37 +720,37 @@ function SearchResult() {
                         hover:rounded-lg h-24`}
                             >
                               <td className='px-6 py-4 '>
-                                <div className='bg-gradient-to-r w-60 truncate from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
+                                <div className='bg-gradient-to-r w-60 truncate from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-medium'>
                                   {row?.hash ?? "-"}
                                 </div>
                               </td>
                               <td className='px-6 py-4 text-center '>
-                                <div className='font-DM+Sans  w-60 truncate  font-bold text-xl  text-white'>
+                                <div className='font-DM+Sans  w-60 truncate  font-bold text-medium  text-white'>
                                   {row?.timeStamp ?? "-"}
                                 </div>
                               </td>
                               <td className='px-6 py-4  text-center'>
-                                <div className='font-DM+Sans    w-60 truncate font-medium text-xl  text-white'>
+                                <div className='font-DM+Sans    w-60 truncate font-medium text-medium  text-white'>
                                   {row?.from ?? "-"}
                                 </div>
                               </td>
                               <td className='px-6 py-4  text-center'>
-                                <div className='font-DM+Sans   w-60 truncate font-medium text-xl  text-white'>
+                                <div className='font-DM+Sans   w-60 truncate font-medium text-medium  text-white'>
                                   {row?.to ?? "-"}
                                 </div>
                               </td>
                               <td className='px-6 py-4  text-center'>
-                                <div className='bg-gradient-to-r  w-60 truncate from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-xl'>
+                                <div className='bg-gradient-to-r  w-60 truncate from-orange-400 via-red-400 to-purple-500 bg-clip-text text-transparent font-medium text-medium'>
                                   {row?.transactionIndex ?? "-"}
                                 </div>
                               </td>
                               <td className='px-6 py-4  text-center'>
-                                <div className='font-DM+Sans   w-60 truncate font-medium text-xl  text-neonGreen'>
+                                <div className='font-DM+Sans   w-60 truncate font-medium text-medium  text-neonGreen'>
                                   +2.53 ETH
                                 </div>
                               </td>
                               <td className='px-6 py-4  text-center'>
-                                <div className='font-DM+Sans   w-60 truncate font-medium text-xl  text-white'>
+                                <div className='font-DM+Sans   w-60 truncate font-medium text-medium  text-white'>
                                   ERC-721
                                 </div>
                               </td>

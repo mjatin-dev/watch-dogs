@@ -14,7 +14,7 @@ function Home() {
           alt='Watchdogs'
           className='w-auto lg:h-20 md:h-16 sm:h-14 mx-auto mb-4'
         />
-        <div className='font-inter font-light text-xl leading-10 flex items-center text-center text-white'>
+        <div className='font-inter font-light text-large leading-10 flex items-center text-center text-white'>
           We know what you do in the dark..
         </div>
       </div>

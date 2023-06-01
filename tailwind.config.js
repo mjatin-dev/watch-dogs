@@ -7,6 +7,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontSize: {
+        medium: "0.90rem",
+        large: "1.4rem",
+      },
       colors: {
         card: "#333639",
         neonGreen: "#2de93f",
