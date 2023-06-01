@@ -138,7 +138,7 @@ const SearchBar = ({ handleChange, value, width }: interfaceSearchBar) => {
 
       <button
         onClick={() => !loading && generateAndNavigate()}
-        className='border-l-2 border-gray-500   w-28 px-4 h-12  bg-black font-inter font-medium text-white text-base leading-6 flex items-center justify-center '
+        className='border-l-2 border-gray-500   w-28 mx-1 px-4 h-12  bg-black font-inter font-medium text-white text-base leading-6 flex items-center justify-center '
       >
         {loading ? (
           <Loader loading={loading} screenSize='h-full' />

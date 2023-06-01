@@ -21,7 +21,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
   const totalPage = setTotalPage();
   const buttonStyles =
-    "bg-fade px-6 py-3 rounded-md text-bold text-medium font-DM+Sans mr-2 cursor-pointer ";
+    "bg-fade px-6 py-3 rounded-md text-bold text-medium font-DM+Sans mr-2 cursor-pointer  ";
   return (
     <div className='flex  items-center mt-4'>
       <div
@@ -44,7 +44,7 @@ const Pagination: React.FC<PaginationProps> = ({
       >
         {"<"}
       </div>
-      <div className={buttonStyles}>
+      <div className={buttonStyles + "text-white"}>
         Pages {page} of {totalPage}
       </div>
       <div

@@ -547,21 +547,6 @@ function SearchResult() {
                 </div>
                 <div className='self-end'>
                   <div className='flex  items-center mt-4'>
-                    {/* <div
-                       className={
-                         nftCollection?.currentPage <= 1
-                           ? ` ${buttonStyles} text-neutral-400 cursor-not-allowed	`
-                           : buttonStyles + "text-white"
-                       }
-                       onClick={() =>
-                         setNftCollection({
-                           ...nftCollection,
-                           currentPage: 1,
-                         })
-                       }
-                     >
-                       First
-                     </div> */}
                     <div
                       className={
                         nftCollectionPage <= 1
@@ -580,30 +565,22 @@ function SearchResult() {
                       Rows {nftCollectionPage} to {nftCollectionPage + 10}
                     </div>
                     <div
-                      className={buttonStyles + "text-white"}
-                      onClick={() =>
-                        setNftCollectionPage(nftCollectionPage + 10)
+                      className={
+                        NFTCollectionRows?.length > nftCollectionPage + 10
+                          ? buttonStyles + "text-white"
+                          : buttonStyles + "text-neutral-400"
                       }
+                      onClick={() => {
+                        if (
+                          NFTCollectionRows?.length >
+                          nftCollectionPage + 10
+                        ) {
+                          setNftCollectionPage(nftCollectionPage + 10);
+                        }
+                      }}
                     >
                       {">"}
                     </div>
-                    {/* <div
-                       className={
-                         nftCollection?.currentPage === nftCollection?.totalPage
-                           ? ` ${buttonStyles} text-neutral-400 cursor-not-allowed mr-0	`
-                           : buttonStyles + "text-white"
-                       }
-                       onClick={() => {
-                         if (nftCollection?.totalPage !== 0) {
-                           setNftCollection({
-                             ...nftCollection,
-                             currentPage: nftCollection?.totalPage,
-                           });
-                         }
-                       }}
-                     >
-                       Last
-                     </div> */}
                   </div>
                 </div>
               </div>
@@ -680,27 +657,27 @@ text-white leading-56 tracking-tight shadow-text'
                   <div className='max-h-screen overflow-auto my-2'>
                     {NFTTransactionRows?.length > 0 ? (
                       <table className='w-full md:min-w-max mt-6	'>
-                        <thead className='text-left bg-fade h-20 text-gray-400 text-sm uppercase'>
+                        <thead className='text-left bg-fade h-10 text-gray-400 text-sm uppercase'>
                           <tr>
-                            <th className='px-6 py-3 font-DM+Sans font-bold text-large text-white '>
+                            <th className='px-6 py-3 font-DM+Sans font-bold text-md text-white '>
                               Txn Hash
                             </th>
-                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-large text-white '>
+                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-md text-white '>
                               Date
                             </th>
-                            <th className='px-6 py-3 font-DM+Sans text-center marker:font-bold text-large text-white '>
+                            <th className='px-6 py-3 font-DM+Sans text-center marker:font-bold text-md text-white '>
                               From
                             </th>
-                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-large text-white '>
+                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-md text-white '>
                               to
                             </th>
-                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-large text-white '>
+                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-md text-white '>
                               Token ID
                             </th>
-                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-large text-white '>
+                            <th className='px-6 py-3 font-DM+Sans text-center font-bold text-md text-white '>
                               Profit / Loss
                             </th>
-                            <th className='px-6 py-3 font-DM+Sans font-bold text-center text-large text-white '>
+                            <th className='px-6 py-3 font-DM+Sans font-bold text-center text-md text-white '>
                               Type
                             </th>
                           </tr>
