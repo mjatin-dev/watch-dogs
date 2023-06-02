@@ -17,22 +17,26 @@ async function getCollectionData(
     walletAddress,
     startPage
   );
-  const collectionData: Array<IcollectionData> = [];
-  for (const collection of collectionsQueryResult) {
-    {
-      const floorPrice = await getFloorPrice(collection.contract_addr);
-      const metaData: any = await getContractNFTname(collection.contract_addr);
-      const { name, imageUrl } = metaData;
-      collectionData.push({
-        floorPrice,
-        name,
-        imageUrl,
-        profit: collection?.profit,
-        total: collection?.total,
-      });
+  if (collectionsQueryResult?.length > 0) {
+    const collectionData: Array<IcollectionData> = [];
+    for (const collection of collectionsQueryResult) {
+      {
+        const floorPrice = await getFloorPrice(collection.contract_addr);
+        const metaData: any = await getContractNFTname(
+          collection.contract_addr
+        );
+        const { name, imageUrl } = metaData;
+        collectionData.push({
+          floorPrice,
+          name,
+          imageUrl,
+          profit: collection?.profit,
+          total: collection?.total,
+        });
+      }
+      return collectionData;
     }
-    return collectionData;
-  }
+  } else return [];
 }
 
 async function queryCollections(
@@ -82,7 +86,6 @@ async function queryCollections(
     where c1.row between ${startPage} and ${startPage + 10}
   `);
     client.end();
-
     return query.rows;
   } catch (err: any) {
     return err;
