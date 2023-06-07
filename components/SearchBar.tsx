@@ -52,8 +52,13 @@ const SearchBar = ({ handleChange, value, width }: interfaceSearchBar) => {
     const response = await fetch(url);
     const data = await response.json();
     if (data?.status === "1") {
+      const sortedArray = data?.result?.sort(
+        (a: any, b: any) => parseInt(b.timeStamp) - parseInt(a.timeStamp)
+      );
+
       dispatch(addEthAddress(ETHAddress, ADD_ETH_ADDRESS));
-      dispatch(addTransactions(data?.result, ADD_TRANSACTION));
+
+      dispatch(addTransactions(sortedArray, ADD_TRANSACTION));
       await Promise.all([
         getTotalBalance(ETHAddress),
         getNftTransactions(ETHAddress),

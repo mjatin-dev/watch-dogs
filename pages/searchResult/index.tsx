@@ -13,6 +13,8 @@ import { ADD_NFT_TRANSACTION } from "@/components/ReduxStore/NftTranscation/Type
 import NoData from "@/components/shared/NoData";
 import { addActualProfit } from "@/components/ReduxStore/ActualProfit/Actions";
 import { ADD_DATA } from "@/components/ReduxStore/ActualProfit/Types";
+import moment from "moment";
+import { convertTimestampToDate } from "@/constants/dateFormat";
 
 function SearchResult() {
   const [searchETH, setSearchETH] = useState<string>("");
@@ -24,8 +26,8 @@ function SearchResult() {
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage] = useState<number>(20);
   const [filters, setFilters] = useState({
-    actualProfit: 3,
-    nftTransaction: 3,
+    actualProfit: "All",
+    nftTransaction: "All",
   });
   const [nftCollectionPage, setNftCollectionPage] = useState<number>(0);
   const dispatch = useDispatch();
@@ -38,14 +40,14 @@ function SearchResult() {
   const state = useSelector((state: any) => state);
   const { totalBalance, totalETH, totalNFT } = state?.totalBalance?.data;
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     if (ethAddress || ethTransactions) {
       if (ethTransactions) setNFTTransactionRows(ethTransactions);
       setActualProfit();
       setNFTCollectionRows(state?.NftCollections?.collections);
     } else toast.error("Something went wrong");
-    setLoading(false)
-  }, [state,ethAddress]);
+    setLoading(false);
+  }, [state, ethAddress]);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -368,9 +370,11 @@ function SearchResult() {
                 </div>
                 <div className='font-medium text-xs flex items-center tracking-wider text-white'>
                   <div
-                    onClick={() => setFilters({ ...filters, actualProfit: 3 })}
+                    onClick={() =>
+                      setFilters({ ...filters, actualProfit: "3M" })
+                    }
                     className={
-                      filters?.actualProfit === 3
+                      filters?.actualProfit === "3M"
                         ? "text-white mr-2"
                         : "text-neutral-400" + ` mr-2 cursor-pointer`
                     }
@@ -379,9 +383,11 @@ function SearchResult() {
                   </div>
                   /
                   <div
-                    onClick={() => setFilters({ ...filters, actualProfit: 6 })}
+                    onClick={() =>
+                      setFilters({ ...filters, actualProfit: "6M" })
+                    }
                     className={
-                      filters?.actualProfit === 6
+                      filters?.actualProfit === "6M"
                         ? "text-white mx-2"
                         : "text-neutral-400" + ` mx-2 cursor-pointer`
                     }
@@ -390,14 +396,29 @@ function SearchResult() {
                   </div>
                   /
                   <div
-                    onClick={() => setFilters({ ...filters, actualProfit: 12 })}
+                    onClick={() =>
+                      setFilters({ ...filters, actualProfit: "12M" })
+                    }
                     className={
-                      filters?.actualProfit === 12
+                      filters?.actualProfit === "12M"
+                        ? "text-white mx-2"
+                        : "text-neutral-400" + ` mx-2 cursor-pointer`
+                    }
+                  >
+                    12M
+                  </div>
+                  /
+                  <div
+                    onClick={() =>
+                      setFilters({ ...filters, actualProfit: "All" })
+                    }
+                    className={
+                      filters?.actualProfit === "All"
                         ? "text-white ml-2"
                         : "text-neutral-400" + ` ml-2 cursor-pointer`
                     }
                   >
-                    12M
+                    All
                   </div>
                 </div>
               </div>
@@ -604,10 +625,10 @@ text-white leading-56 tracking-tight shadow-text'
                 <div className='font-medium text-xs flex items-center tracking-wider text-white'>
                   <div
                     onClick={() =>
-                      setFilters({ ...filters, nftTransaction: 3 })
+                      setFilters({ ...filters, nftTransaction: "3M" })
                     }
                     className={
-                      filters?.nftTransaction === 3
+                      filters?.nftTransaction === "3M"
                         ? "text-white mr-2"
                         : "text-neutral-400" + ` mr-2 cursor-pointer`
                     }
@@ -617,10 +638,10 @@ text-white leading-56 tracking-tight shadow-text'
                   /
                   <div
                     onClick={() =>
-                      setFilters({ ...filters, nftTransaction: 6 })
+                      setFilters({ ...filters, nftTransaction: "6M" })
                     }
                     className={
-                      filters?.nftTransaction === 6
+                      filters?.nftTransaction === "6M"
                         ? "text-white mx-2"
                         : "text-neutral-400" + ` mx-2 cursor-pointer`
                     }
@@ -630,15 +651,28 @@ text-white leading-56 tracking-tight shadow-text'
                   /
                   <div
                     onClick={() =>
-                      setFilters({ ...filters, nftTransaction: 12 })
+                      setFilters({ ...filters, nftTransaction: "12M" })
                     }
                     className={
-                      filters?.nftTransaction === 12
+                      filters?.nftTransaction === "12M"
+                        ? "text-white mx-2"
+                        : "text-neutral-400" + ` mx-2 cursor-pointer`
+                    }
+                  >
+                    12M
+                  </div>
+                  /
+                  <div
+                    onClick={() =>
+                      setFilters({ ...filters, nftTransaction: "All" })
+                    }
+                    className={
+                      filters?.nftTransaction === "All"
                         ? "text-white ml-2"
                         : "text-neutral-400" + ` ml-2 cursor-pointer`
                     }
                   >
-                    12M
+                    All
                   </div>
                 </div>
               </div>
@@ -703,7 +737,9 @@ text-white leading-56 tracking-tight shadow-text'
                               </td>
                               <td className='px-6 py-4 text-center '>
                                 <div className='font-DM+Sans  w-60 truncate  font-bold text-medium  text-white'>
-                                  {row?.timeStamp ?? "-"}
+                                  {row?.timeStamp
+                                    ? convertTimestampToDate(row?.timeStamp)
+                                    : "-"}
                                 </div>
                               </td>
                               <td className='px-6 py-4  text-center'>
