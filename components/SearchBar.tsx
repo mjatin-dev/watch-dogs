@@ -62,7 +62,7 @@ const SearchBar = ({ handleChange, value, width }: interfaceSearchBar) => {
       await Promise.all([
         getTotalBalance(ETHAddress),
         getNftTransactions(ETHAddress),
-        getActualProfit(),
+        getActualProfit(ETHAddress),
         getNftCollections(ETHAddress),
       ]);
       setLoading(false);
@@ -116,8 +116,11 @@ const SearchBar = ({ handleChange, value, width }: interfaceSearchBar) => {
     }
   };
 
-  const getActualProfit = async () => {
-    const response = await fetch("/api/actualProfit?filter=3");
+  const getActualProfit = async (value: string) => {
+    const walletAddress = value;
+    const response = await fetch(
+      `/api/actualProfit?filter=ALL&walletAddress=${walletAddress}`
+    );
     if (response.status === 200) {
       const data = await response.json();
       dispatch(addActualProfit(data, ADD_DATA));

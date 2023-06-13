@@ -75,8 +75,9 @@ function SearchResult() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      const walletAddress = ethAddress;
       const response = await fetch(
-        `/api/actualProfit?filter=${filters?.actualProfit}`
+        `/api/actualProfit?filter=${filters?.actualProfit}&walletAddress=${walletAddress}`
       );
       if (response.status === 200) {
         const data = await response.json();
@@ -119,7 +120,7 @@ function SearchResult() {
         image: "/sample1.png",
         col2: {
           code: `${item?.marketplace ?? "-"} #${item?.tokenid}`,
-          time: getTimeDiffFromNow(item?.trans_date),
+          time: getTimeDiffFromNow(item?.t_date),
         },
         col3: item["seller fee amt"]?.toFixed(1) + "ETH",
       };

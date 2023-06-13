@@ -14,30 +14,38 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
   if (method === "GET") {
     try {
-      const { filter }: any = req.query;
+      const { filter, walletAddress }: any = req.query;
+      const months =
+        filter === "3M" ? 3 : filter === "6M" ? 6 : filter === "12M" ? 12 : 0;
+      const currentDate = moment().format("YYYY-MM");
+      const previousDate = moment()
+        .subtract(months, "months")
+        .format("YYYY-MM");
       const query = await client.query(`
-      select t0.buyer_address,t0.taker,t0.trans_date,t0.tx_hash,t0."seller fee amt",t0.marketplace,t0.tokenid,
-      case
-            when t0.taker = 'SELLER' and prev_signal is null then 0
-            when t0.taker = 'SELLER' then (t0."seller fee amt"-prev_price)
-        end as profit, t0.contract_addr,t0.wallet_addr
-      from (
-        select  wallet_transactions.buyer_address,wallet_transactions.taker,wallet_transactions.trans_date, wallet_transactions.tx_hash,wallet_transactions."seller fee amt",wallet_transactions.marketplace,wallet_transactions.tokenid,contract_addr,wallet_addr,
-            lag(wallet_transactions.taker) OVER (PARTITION BY wallet_transactions.buyer_address, wallet_transactions.tokenid ORDER BY wallet_transactions.trans_date) as prev_signal,
-            lag(wallet_transactions."seller fee amt") OVER (PARTITION BY wallet_transactions.buyer_address, wallet_transactions.tokenid ORDER BY wallet_transactions.trans_date) as prev_price
-        from wallet_transactions
-      ) as t0
-    `);
-      const currentDate = new Date();
-      const monthsAgo = new Date();
-      monthsAgo.setMonth(currentDate.getMonth() - parseInt(filter));
-      const filteredItems = query.rows.filter((item) => {
-        const transDate = new Date(item.trans_date);
-        return transDate >= monthsAgo && transDate <= currentDate;
-      });
+select * from (WITH B as (with a as (select t0.buyer_address,t0.taker,t0.t_date,t0.tx_hash,t0."seller fee amt",t0.marketplace,t0.tokenid,
+case
+   when t0.taker = 'SELLER' and prev_signal is null then 0
+   when t0.taker = 'SELLER' then (t0."seller fee amt"-prev_price)
+end as profit, t0.contract_addr,t0.wallet_addr
+from (
+select  wallet_transactions.buyer_address,wallet_transactions.taker,to_char(wallet_transactions.trans_date,'YYYY-MM') as t_date, wallet_transactions.tx_hash,wallet_transactions."seller fee amt",wallet_transactions.marketplace,wallet_transactions.tokenid,contract_addr,wallet_addr,
+   lag(wallet_transactions.taker) OVER (PARTITION BY wallet_transactions.buyer_address, wallet_transactions.tokenid ORDER BY wallet_transactions.trans_date) as prev_signal,
+   lag(wallet_transactions."seller fee amt") OVER (PARTITION BY wallet_transactions.buyer_address, wallet_transactions.tokenid ORDER BY wallet_transactions.trans_date) as prev_price
+from wallet_transactions
+) as t0
+)
+select a.*
+from a
+where a.t_date between   '2020-01'and '${currentDate}' )
 
-      const limitedItems = filteredItems.slice(0, 10);
-      res.status(200).json(limitedItems);
+
+select B.*,
+ROW_NUMBER() OVER(ORDER BY B.profit DESC) AS "Pagination" from B
+where B.wallet_addr =  '${walletAddress}') as finalT
+where finalT."Pagination" between 1 and 5
+
+    `);
+      res.status(200).json(query.rows);
       client.end();
       return;
     } catch (err: any) {
