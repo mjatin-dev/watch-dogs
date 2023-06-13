@@ -18,9 +18,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const months =
         filter === "3M" ? 3 : filter === "6M" ? 6 : filter === "12M" ? 12 : 0;
       const currentDate = moment().format("YYYY-MM");
-      const previousDate = moment()
-        .subtract(months, "months")
-        .format("YYYY-MM");
+      const previousDate =
+        filter === "ALL"
+          ? "2020-01"
+          : moment().subtract(months, "months").format("YYYY-MM");
       const query = await client.query(`
 select * from (WITH B as (with a as (select t0.buyer_address,t0.taker,t0.t_date,t0.tx_hash,t0."seller fee amt",t0.marketplace,t0.tokenid,
 case
@@ -36,7 +37,7 @@ from wallet_transactions
 )
 select a.*
 from a
-where a.t_date between   '2020-01'and '${currentDate}' )
+where a.t_date between '${previousDate}' and '${currentDate}' )
 
 
 select B.*,

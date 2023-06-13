@@ -13,7 +13,6 @@ import { ADD_NFT_TRANSACTION } from "@/components/ReduxStore/NftTranscation/Type
 import NoData from "@/components/shared/NoData";
 import { addActualProfit } from "@/components/ReduxStore/ActualProfit/Actions";
 import { ADD_DATA } from "@/components/ReduxStore/ActualProfit/Types";
-import moment from "moment";
 import { convertTimestampToDate } from "@/constants/dateFormat";
 
 function SearchResult() {
