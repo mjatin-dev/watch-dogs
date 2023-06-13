@@ -119,7 +119,7 @@ const SearchBar = ({ handleChange, value, width }: interfaceSearchBar) => {
   const getActualProfit = async (value: string) => {
     const walletAddress = value;
     const response = await fetch(
-      `/api/actualProfit?filter='ALL'&walletAddress=${walletAddress}`
+      `/api/actualProfit?filter='All'&walletAddress=${walletAddress}`
     );
     if (response.status === 200) {
       const data = await response.json();
