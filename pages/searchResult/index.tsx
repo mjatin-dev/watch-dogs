@@ -14,6 +14,7 @@ import NoData from "@/components/shared/NoData";
 import { addActualProfit } from "@/components/ReduxStore/ActualProfit/Actions";
 import { ADD_DATA } from "@/components/ReduxStore/ActualProfit/Types";
 import { convertTimestampToDate } from "@/constants/dateFormat";
+import { calculateTotal } from "@/constants/calc";
 
 function SearchResult() {
   const [searchETH, setSearchETH] = useState<string>("");
@@ -364,7 +365,7 @@ function SearchResult() {
                   </p>
                   {profitabilityRows?.length > 0 && (
                     <p className='font-DM+Sans font-bold text-large text-neonGreen leading-56 tracking-tight shadow-text'>
-                      + $20,457
+                      + ${calculateTotal(profitabilityRows, "profit") ?? "-"}
                     </p>
                   )}
                 </div>
@@ -545,7 +546,7 @@ function SearchResult() {
                             </td>
                             <td className='px-6 py-4 '>
                               <div className='font-DM+Sans text-medium font-bold text-7  text-white'>
-                                {row?.profit + "ETH" ?? "-"}
+                                {row?.profit ? row?.profit + "ETH" : "-"}
                               </div>
                               <div className={` h-4 `}>{""}</div>
                             </td>
