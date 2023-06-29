@@ -96,8 +96,9 @@ function SearchResult() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      const walletAddress = ethAddress;
       const response = await fetch(
-        `/api/nftTransactions?filter=${filters?.nftTransaction}`
+        `/api/nftTransactions?filter=${filters?.nftTransaction}&walletAddress=${walletAddress}`
       );
       if (response.status === 200) {
         const data = await response.json();
@@ -134,6 +135,28 @@ function SearchResult() {
   const handleChange = (event: any) => {
     setSearchETH(event.target.value);
   };
+
+  function groupObjectsByKey(
+    array: any[],
+    key: string
+  ): { name: string; data: any[] }[] {
+    const result: { name: string; data: any[] }[] = [];
+
+    array?.map((obj) => {
+      const tempKey = obj[key];
+      const group = result.find((item) => item.name === tempKey);
+      if (group) {
+        group.data.push([obj.profit ? obj.profit : 0, obj.t_date]);
+      } else {
+        result.push({
+          name: tempKey,
+          data: [[obj.profit ? obj.profit : 0, obj.t_date]],
+        });
+      }
+    });
+    console.log("result", result);
+    return result;
+  }
 
   const NFTTransactionsChartData: any = {
     options: {
@@ -188,30 +211,13 @@ function SearchResult() {
         },
       },
     },
-    series: [
-      {
-        name: "PORSCHE 911",
-        data: [
-          [14.2, 215.4],
-          [15.5, 245.8],
-          [16.9, 276.4],
-          [19.6, 299.2],
-          [22.2, 351.5],
-        ],
-      },
-      {
-        name: "PORSCHE 926",
-        data: [
-          [10.0, 200.0],
-          [12.5, 240.8],
-          [16.0, 300.6],
-          [21.0, 380.7],
-          [25.0, 450.5],
-        ],
-      },
-    ],
+    series: groupObjectsByKey(
+      state?.nftTransaction?.transactions,
+      "marketplace"
+    ),
     type: "scatter",
   };
+
   const donutChartData: any = {
     options: {
       chart: {

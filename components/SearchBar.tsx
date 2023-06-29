@@ -91,7 +91,7 @@ const SearchBar = ({ handleChange, value, width }: interfaceSearchBar) => {
   const getNftTransactions = async (value: string) => {
     const walletAddress = value;
     const response = await fetch(
-      `/api/nftTransactions?walletAddress=${walletAddress}`
+      `/api/nftTransactions?filter='All'&walletAddress=${walletAddress}`
     );
     if (response.status === 200) {
       const data = await response.json();
