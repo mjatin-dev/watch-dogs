@@ -15,6 +15,7 @@ import { addActualProfit } from "@/components/ReduxStore/ActualProfit/Actions";
 import { ADD_DATA } from "@/components/ReduxStore/ActualProfit/Types";
 import { convertTimestampToDate } from "@/constants/dateFormat";
 import { calculateTotal } from "@/constants/calc";
+import { createScatterChartData } from "@/constants/chartData";
 
 function SearchResult() {
   const [searchETH, setSearchETH] = useState<string>("");
@@ -136,28 +137,6 @@ function SearchResult() {
     setSearchETH(event.target.value);
   };
 
-  function groupObjectsByKey(
-    array: any[],
-    key: string
-  ): { name: string; data: any[] }[] {
-    const result: { name: string; data: any[] }[] = [];
-
-    array?.map((obj) => {
-      const tempKey = obj[key];
-      const group = result.find((item) => item.name === tempKey);
-      if (group) {
-        group.data.push([obj.profit ? obj.profit : 0, obj.t_date]);
-      } else {
-        result.push({
-          name: tempKey,
-          data: [[obj.profit ? obj.profit : 0, obj.t_date]],
-        });
-      }
-    });
-    console.log("result", result);
-    return result;
-  }
-
   const NFTTransactionsChartData: any = {
     options: {
       dataLabels: {
@@ -185,6 +164,7 @@ function SearchResult() {
         },
       },
       xaxis: {
+        type: "datetime",
         labels: {
           style: {
             colors: "#fff",
@@ -211,7 +191,7 @@ function SearchResult() {
         },
       },
     },
-    series: groupObjectsByKey(
+    series: createScatterChartData(
       state?.nftTransaction?.transactions,
       "marketplace"
     ),
