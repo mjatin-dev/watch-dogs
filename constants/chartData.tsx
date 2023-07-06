@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export function createScatterChartData(array: any[], key: string) {
   const groupedData = groupObjectsByKey(array, key);
   const scatterChartData = groupedData.map((group) => ({
@@ -28,7 +30,7 @@ export function groupObjectsByKey(
     const group = result.find((item) => item.name === tempKey);
     if (group) {
       group.data.push({
-        x: new Date(obj.t_date),
+        x: moment(obj.t_date).format("MMM DD, YYYY"),
         y: obj.profit ? obj.profit : 0,
         buyer_address: obj?.buyer_address,
         tx_hash: obj?.tx_hash,

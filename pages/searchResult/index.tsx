@@ -16,6 +16,7 @@ import { ADD_DATA } from "@/components/ReduxStore/ActualProfit/Types";
 import { convertTimestampToDate } from "@/constants/dateFormat";
 import { calculateTotal } from "@/constants/calc";
 import { createScatterChartData } from "@/constants/chartData";
+import moment from "moment";
 
 function SearchResult() {
   const [searchETH, setSearchETH] = useState<string>("");
@@ -171,6 +172,43 @@ function SearchResult() {
           },
         },
       },
+      tooltip: {
+        style: {
+          fontSize: "12px",
+          color: "#333639",
+        },
+        custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
+          var data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
+
+          return `
+            <div style="background-color: #000000; color: #ffffff; padding: 10px;">
+              <ul style="list-style: none;">
+              <li><b>Date</b>: ${
+                data.x ? moment(data.x).format("MMM DD, YYYY") : "-"
+              }</li>
+              <li><b>Profit</b>: ${data.y ? data.y : "-"}</li>
+                <li><b>Buyer Address</b>: ${
+                  data.buyer_address ? data.buyer_address : "-"
+                }</li>
+                <li><b>Transaction Hash</b>: ${
+                  data.tx_hash ? data.tx_hash : "-"
+                }</li>
+                <li><b>Seller Fee Amount</b>: ${
+                  data.seller_fee_amt ? data.seller_fee_amt : "-"
+                }</li>
+                <li><b>Marketplace</b>: ${
+                  data.marketplace ? data.marketplace : "-"
+                }</li>
+                <li><b>Token ID</b>: ${data.tokenid ? data.tokenid : "-"}</li>
+                <li><b>Contract Address</b>: ${
+                  data.contract_addr ? data.contract_addr : "-"
+                }</li>
+              </ul>
+            </div>
+          `;
+        },
+      },
+
       yaxis: {
         labels: {
           style: {
